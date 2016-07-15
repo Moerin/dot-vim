@@ -1,5 +1,5 @@
 " Vimrc configuration file
-" Version : 2015-09
+" Version : 2016-07
 
 " Vundle configuration
 "-----------------------------------
@@ -45,41 +45,70 @@ Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 Plugin 'ryanoasis/vim-devicons'
 Plugin 'benmills/vimux'
-Plugin 'vim-scripts/c.vim'
-Plugin 'Shougo/deoplete.nvim'
-Plugin 'python-rope/ropevim'
+Plugin 'freeo/vim-kalisi'
+Plugin 'hdima/python-syntax'
+Plugin 'morhetz/gruvbox'
+Plugin 'matchit.zip'
 Plugin 'fatih/vim-go'
+Plugin 'zchee/deoplete-go', { 'do': 'make'}
+Plugin 'zchee/deoplete-jedi'
+Plugin 'joshdick/onedark.vim'
+Plugin 'tpope/vim-obsession'
+Plugin 'Shougo/deoplete.nvim'
+Plugin 'junegunn/vim-peekaboo'
+Plugin 'sjl/gundo.vim'
 Plugin 'tmhedberg/SimpylFold'
 Plugin 'vim-scripts/indentpython.vim'
 Plugin 'jmcantrell/vim-virtualenv'
-Plugin 'sjl/gundo.vim'
-Plugin 'xolox/vim-easytags'
+Plugin 'Shougo/echodoc.vim'
 Plugin 'xolox/vim-misc'
+Plugin 'joonty/vdebug'
+Plugin 'diepm/vim-rest-console'
+Plugin 'nsf/gocode', {'rtp': 'nvim/'}
+Plugin 'Konfekt/FastFold'
 
+"--------------"
+"Outdated Plugin"
+"--------------"
+
+"Plugin 'xolox/vim-easytags'
 "Plugin 'Valloric/YouCompleteMe'
-"Plugin 'benekastah/neomake'
+"Plugin 'joonty/vim-taggatron'
+"Plugin 'jistr/vim-nerdtree-tabs'
 
 call vundle#end()
 filetype plugin indent on
 
+" Vdebug setup
+"-----------------------------------
+let g:vdebug_keymap = {
+\    "run" : "<Leader>/",
+\    "run_to_cursor" : "<Down>",
+\    "step_over" : "<Up>",
+\    "step_into" : "<Left>",
+\    "step_out" : "<Right>",
+\    "close" : "q",
+\    "detach" : "x",
+\    "set_breakpoint" : "<Leader>b",
+\    "eval_visual" : "<Leader>e"
+\}
+
+"let g:vdebug_options = {
+"\    "break_on_open" : 0,
+"\}
+
 " Airline setup
-" -----------------------------------
+"-----------------------------------
 set laststatus=2
 set statusline+=%{fugitive#statusline()}
 set statusline+=%{virtualenv#statusline()}
 let g:airline_powerline_fonts = 1 
 let g:airline#extensions#tabline#enabled=1
-set t_Co=256
 
 " Gundo setup
+" ----------------------------------
 nnoremap <F6> :GundoToggle<CR>
-
-" Vimdevicons
-" -----------------------------------
-"set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 10
 set guifont=Sauce\ Code\ Powerline\ Plus\ Nerd\ File\ Types\ Mono\ Plus\ Font\ Awesome\ Plus\ Octicons\ Plus\ Pomicons\ 10
-"set guifont=DroidSansMonoForPowerlinePlusNerdFileTypes 10
-set encoding=utf-8
 
 " Vimwiki setup
 " ----------------------------------
@@ -87,12 +116,32 @@ let g:vimwiki_list=[{'path':'~/.vim/vimwiki'}]
 
 " Vimux setup
 " ----------------------------------
-map <Leader>ps :call VimuxRunCommand("v3; python manage.py shell;")
+map <Leader>ps :call VimuxRunCommand("v3; python manage.py shell;")<CR>
 map <Leader>vp :VimuxPromptCommand<CR>
 " Close vim tmux runner opened by VimuxRunCommand
 map <Leader>vq :VimuxCloseRunner<CR>
 " Interrupt any command running in the runner pane map
 map <Leader>vs :VimuxInterruptRunner<CR>
+
+" Obsession 
+" ----------------------------------
+set statusline+=%{ObsessionStatus()}
+
+" Deoplete 
+" ----------------------------------
+let g:deoplete#enable_at_startup = 1
+" use tab to forward cycle
+inoremap <silent><expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+" use tab to backward cycle
+inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
+
+autocmd FileType python setlocal omnifunc=jedi#completions
+
+set noshowmode
+let g:echodoc_enable_at_startup = 1
+
+let g:deoplete#sources#jedi#show_docstring = 1
+autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
 " NERDTree setup
 " ----------------------------------
@@ -104,32 +153,9 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 let NERDTreeShowBookmarks=1
 " Mirroring between tabs
 let NERDTreeMirror=0
-nmap <F2> :NERDTreeToggle<cr>
-
-"" YouCompleteme
-"" ----------------------------------
-"let g:EclimCompletionMethod = 'omnifunc'
-"let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/.ycm_extra_conf.py'
-"let g:ycm_collect_identifiers_from_tags_files = 1 " Let YCM read tags from
-"" Ctags file
-"let g:ycm_use_ultisnips_completer = 1 " Default 1, just ensure
-"let g:ycm_seed_identifiers_with_syntax = 1 " Completion for programming
-"" language's keyword
-"let g:ycm_complete_in_comments = 1 " Completion in comments
-"let g:ycm_complete_in_strings = 1 " Completion in strings
-
-"" Deoplete
-"" ----------------------------------
-let g:deoplete#enable_at_startup = 1
-" use tab to forward cycle
-inoremap <silent><expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-" use tab to backward cycle
-inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 
 " Vim-indent-guides
 " ----------------------------------
-set background=dark
-colorscheme solarized
 set ts=4 sw=4 et
 let g:indent_guides_start_level = 2
 let g:indent_guides_guide_size = 1
@@ -158,21 +184,59 @@ let g:syntastic_auto_jump = 2
 " Disable warning level in loc_list for all checker
 let g:syntastic_quiet_messages = { "level": "warnings" }
 " Change format of print
-let g:syntastic_stl_format = '[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
+let g:syntastic_python_flake8_args='--ignore=E501,F403,E702'
 
+" Colorscheme
+" ----------------------------------
+set timeout
+set timeoutlen=750
+set ttimeoutlen=250
+set t_Co=256
+set background=dark
+
+colorscheme gruvbox
+let g:gruvbox_termcolors=256
+
+"colorscheme onedark
+"let g:onedark_termcolors=256
+
+"colorscheme kalisi
+"colorscheme solarized
+"let g:solarized_termcolors=256
+
+if has('nvim')
+  set t_ut=
+  set t_ZH=�[3m
+  set t_ZR=�[23m
+
+  "let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+
+  set ttimeout
+  set ttimeoutlen=0
+
+  "let g:solarized_italic=0
+endif
+
+if has("gui_running")
+    syntax enable
+    set background=dark
+    colorscheme solarized
+endif
 
 " Pymode setup
 " ----------------------------------
 let g:pymode = 1
 let g:pymode_folding = 1
 let g:pymode_rope_completion = 0
-let g:pymode_breakpoint_cmd = 'import ipdb; ipdb.set_trace() # XXX BREAKPOINT'
+let g:pymode_breakpoint_cmd = 'import ipdb; ipdb.set_trace()  # XXX BREAKPOINT'
 let g:pymode_lint = 0
+let g:pymode_rope_autoimport = 1
 
 " Enable folding with the spacebar
 nnoremap <space> za
 
-" SimpylFold setup
+" SimplyFold setup
 let g:SimpylFold_docstring_preview=1
 
 " Signify setup
@@ -183,10 +247,6 @@ nmap <leader>gk <plug>(signify-prev-hunk)
 " TagBar setup
 " ----------------------------------
 nmap <F8> :TagbarToggle<CR>
-
-" C.vim
-" ----------------------------------
-let g:C_UseToolcmake = 'yes'
 
 " FZF
 " ----------------------------------
@@ -234,32 +294,13 @@ endfunction
 
 nnoremap <silent> <c-h> :FZFMru<CR> 
 
-" Ultisnips setup
-" ----------------------------------
-let g:UltiSnipsExpandTrigger = '<c-j>'
-let g:UltiSnipsListSnippets = '<c-tab>'
-let g:UltiSnipsJumpForwardTrigger = '<c-h>'
-let g:UltiSnipsJumpBackwardTrigger = '<c-k>'
-
-" Vim easy-tags
-" ----------------------------------
-autocmd FileType * set tags=./.tags;,tags;,~/.vim/.vimtags
-set cpoptions+=d
-let g:easytags_file = '~/.vim/.vimtags'
-let g:easytags_dynamic_files = 2
-let g:easytags_async = 1
-let b:easytags_auto_highlight = 0
-let g:easytags_python_enabled = "always"
-" Debug
-"set vbs=1
-
 " General
 " ----------------------------------
-syntax on
-let g:solarized_termcolors=256  
-set background=dark  
-colorscheme solarized
 
+let g:python_host_prog = '/usr/bin/python'
+let g:python3_host_prog = '/usr/bin/python3'
+
+syntax on
 " Ignore case when searching
 set ignorecase
 
@@ -291,24 +332,23 @@ set undofile
 set undolevels=1000 "maximum number of changes that can be undone
 set undoreload=10000 "maximum number lines to save for undo on a buffer reload
 
+" Shortkeys loading
+"-----------------------------------
+execute 'source ' . $HOME . '/.vim/shortkeys.vim'
+
 " Affichage des numeros de ligne
 set number
-highlight LineNr ctermbg=darkblue ctermfg=gray
-
-" Longueur maximale de lignes
-set textwidth=80
+"highlight LineNr ctermbg=darkblue ctermfg=gray
 
 " Affiche une aide pour 80 caracteres
 set cc=80
 
-" Surligne la colonne du dernier caractere autorise par textwidth
-set cc=+1
-
-" Definition de l'affichage des caracteres invisibles avec 'set list'
+" Definition de l'affichage des caracteres invisbles avec 'set list'
 " set listchars=nbsp:
 
 " Affichage surbrillance recherche
 set hlsearch
+set smartcase
 
 " Makes search act like search in modern browsers
 set incsearch 
@@ -324,16 +364,18 @@ map j gj
 map k gk
 
 " Indentation respectant le format de developpement
-set smartindent
+set cindent
 set tabstop=4
 set shiftwidth=4
 set expandtab
+
+" Syntax pour python
+let python_highlight_all = 1
 
 " Indentation pour python
 autocmd FileType python set sw=4
 autocmd FileType python set ts=4
 autocmd FileType python set sts=4
-
 
 " Permet d'utiliser des .vimrc par projets et eviter les commandes dangereuses
 set exrc
@@ -341,13 +383,6 @@ set secure
 
 " format JSON
 command! FormatJSON %!python -m json.tool
-
-" Solarized conf
-if has("gui_running")
-    syntax enable
-    set background=dark
-    colorscheme solarized
-endif
 
 " Xml auto indent command 'gg=G'
 au FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null
@@ -383,33 +418,62 @@ endfunction
 
 command! PrettyXML call DoPrettyXML()set secure
 
-" PHP tags
-set tags=~/workspace/svn/lengow/php.tags
-
-" C compilation
-set makeprg=make\ -C\ ../build\ -j9
-nnoremap <F4> :make!<cr>
+" Tags
+set tags=~/workspace/svn/lengow/php.tags;~/workspace/pymarketplaces/python.tags
 
 " Vimgrep search
-nmap <F5> :Ack! 
+nmap <leader>F :Ack!
+nmap <leader>Fp :Ack! --python 
 
-" Backspace correction
-set backspace=indent,eol,start
+" Redraw fix
+imap <silent> <c-l> <c-o>:redraw!<CR>
 
 " Coloris en rouge les fins de ligne
 autocmd InsertEnter * syn clear EOLWS | syn match EOLWS excludenl /\s\+\%#\@!$/
 autocmd InsertLeave * syn clear EOLWS | syn match EOLWS excludenl /\s\+$/
 highlight EOLWS ctermbg=red guibg=red
 
-" Breaking bad habit!!
+" Break bad habits!!
 noremap <Up> <NOP>
 noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
 
-" easy-tags
-autocmd FileType * set tags=./.tags;,~/.vim/.vimtags
-set cpoptions+=d
-let g:easytags_file = '~/.vim/.vimtags'
-let g:easytags_dynamic_files = 2
-let g:easytags_async = 1
+"" Remap TabKey
+"nnoremap <Tab> <Esc>
+"vnoremap <Tab> <Esc>gV
+"onoremap <Tab> <Esc>
+"inoremap <Tab> <Esc>`^
+"inoremap <Leader><Tab> <Tab>
+
+" Copy to clipboard
+vnoremap  <leader>y  "+y
+nnoremap  <leader>Y  "+yg_
+nnoremap  <leader>y  "+y
+nnoremap  <leader>yy  "+yy
+
+" Paste from clipboard
+nnoremap <leader>p "+p
+nnoremap <leader>P "+P
+vnoremap <leader>p "+p
+vnoremap <leader>P "+P
+
+" Activate autoreload
+set autoread
+
+" Mute highlighting
+nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
+
+" reload config after editing vimrc
+autocmd! BufWritePost .vimrc source $MYVIMRC
+
+" U is useless (except for Vi compatibility), make it a redo instead
+map U <C-r>
+" make K more consistent with J (J = join, K = split)
+nnoremap K i<CR><Esc>k$
+" Alternative: use a real 'Man' on K
+" runtime ftplugin/man.vim
+" nnoremap K :Man <C-r><C-w><CR>
+" use :W to sudo-write the current buffer
+" command! W w !sudo tee "%" > /dev/null
+command! W w !sudo dd of=%
