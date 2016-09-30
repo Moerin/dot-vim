@@ -30,7 +30,6 @@ Plugin 'elzr/vim-json'
 Plugin 'jlanzarotta/bufexplorer'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
-Plugin 'scrooloose/syntastic'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'mhinz/vim-signify'
 Plugin 'majutsushi/tagbar'
@@ -66,11 +65,13 @@ Plugin 'joonty/vdebug'
 Plugin 'diepm/vim-rest-console'
 Plugin 'nsf/gocode', {'rtp': 'nvim/'}
 Plugin 'Konfekt/FastFold'
+Plugin 'neomake/neomake'
 
 "--------------"
 "Outdated Plugin"
 "--------------"
 
+"Plugin 'scrooloose/syntastic'
 "Plugin 'xolox/vim-easytags'
 "Plugin 'Valloric/YouCompleteMe'
 "Plugin 'joonty/vim-taggatron'
@@ -93,9 +94,9 @@ let g:vdebug_keymap = {
 \    "eval_visual" : "<Leader>e"
 \}
 
-"let g:vdebug_options = {
-"\    "break_on_open" : 0,
-"\}
+let g:vdebug_options = {
+\    "break_on_open" : 0,
+\}
 
 " Airline setup
 "-----------------------------------
@@ -166,25 +167,57 @@ augroup IndentGuides
     autocmd VimEnter * IndentGuidesEnable
 augroup END
 
+" Neomake
+" ----------------------------------
+let g:neomake_python_enabled_makers = ['flake8', 'pep8']
+let g:neomake_python_flake8_maker = { 'args': ['--ignore=E501, E702, F403'], }
+let g:neomake_python_pep8_maker = { 'args': ['--max-line-length=100', '--ignore=E115,E266'], }
+"let g:neomake_open_list = 2
+
+function! LocationNext()
+  try
+    lnext
+  catch
+    try | lfirst | catch | endtry
+  endtry
+endfunction
+
+function! LocationPrevious()                                                                  
+  try
+    lprev
+  catch
+    try | lfirst | catch | endtry
+  endtry
+endfunction
+
+nnoremap <leader>e :call LocationNext()<cr>
+nnoremap <leader><S-e> :call LocationPrevious()<cr>
+
+" Debug
+"let g:neomake_verbose = 3
+"let g:neomake_logfile='/tmp/error.log'
+
+autocmd! BufWritePost * Neomake
+
 " Syntactic
 " ----------------------------------
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_enable_signs = 1
-" Not work
-highlight SyntasticWarningSign guifg=white guibg=red
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_w = 1
-let g:syntastic_python_checkers = ['flake8']
-let g:syntastic_auto_jump = 2 
-" Disable warning level in loc_list for all checker
-let g:syntastic_quiet_messages = { "level": "warnings" }
-" Change format of print
-let g:syntastic_python_flake8_args='--ignore=E501,F403,E702'
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_enable_signs = 1
+"" Not work
+"highlight SyntasticWarningSign guifg=white guibg=red
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_w = 1
+"let g:syntastic_python_checkers = ['flake8']
+"let g:syntastic_auto_jump = 2 
+"" Disable warning level in loc_list for all checker
+"let g:syntastic_quiet_messages = { "level": "warnings" }
+"" Change format of print
+"let g:syntastic_python_flake8_args='--ignore=E501,F403,E702'
 
 " Colorscheme
 " ----------------------------------
@@ -459,7 +492,7 @@ vnoremap <leader>p "+p
 vnoremap <leader>P "+P
 
 " Activate autoreload
-set autoread
+"set autoread
 
 " Mute highlighting
 nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
