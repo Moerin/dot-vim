@@ -8,7 +8,12 @@ filetype off
 
 exe 'set rtp+=' . $GOPATH . '/src/github.com/junegunn/fzf'
 
-set rtp+=~/.vim/bundle/Vundle.vim
+if has('nvim')
+    set rtp+=~/.config/nvim/bundle/Vundle.vim
+else
+    set rtp+=~/.vim/bundle/Vundle.vim
+endif
+
 call vundle#begin()
 
 " Vundle management (for updates)
@@ -365,9 +370,24 @@ set undofile
 set undolevels=1000 "maximum number of changes that can be undone
 set undoreload=10000 "maximum number lines to save for undo on a buffer reload
 
-" Shortkeys loading
-"-----------------------------------
-execute 'source ' . $HOME . '/.vim/shortkeys.vim'
+" NerdTree activation
+"----------------------------------
+map <F2> <ESC>:NERDTreeToggle<CR>
+
+" UltiSnips
+" ----------------------------------
+let g:UltiSnipsExpandTrigger       = "<c-j>"
+let g:UltiSnipsJumpForwardTrigger  = "<c-l>"
+let g:UltiSnipsJumpBackwardTrigger = "<c-h>"
+let g:UltiSnipsListSnippets        = "<c-k>" "List possible snippets based on current file
+
+" Folding/Unfolding
+map <2-LeftMouse> za
+
+" Buffers - explore/next/previous: Alt-F12, F12, Shift-F12.
+nnoremap <silent> <M-F12> :BufExplorer<CR>
+nnoremap <silent> <F12> :bn<CR>
+nnoremap <silent> <S-F12> :bp<CR>
 
 " Affichage des numeros de ligne
 set number
