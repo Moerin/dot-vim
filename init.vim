@@ -15,10 +15,10 @@ if &compatible
 endif
 
 " Required:
-set runtimepath+=/home/sebastien/.config/nvim/bundle/repos/github.com/Shougo/dein.vim
+set runtimepath+=$HOME/.config/nvim/bundles/repos/github.com/Shougo/dein.vim
 
 " Required:
-call dein#begin('/home/sebastien/.config/nvim/bundle')
+call dein#begin("$HOME/.config/nvim/bundles")
 
 " Let dein manage dein
 " Required:
@@ -216,7 +216,7 @@ augroup END
 
 " Neomake
 " ----------------------------------
-let g:neomake_python_enabled_makers = ['flake8', 'pep8']
+let g:neomake_python_enabled_makers = ['flake8', 'pep8', 'pylama']
 let g:neomake_python_flake8_maker = { 'args': ['--ignore=E501, E702, F403'], }
 let g:neomake_python_pep8_maker = { 'args': ['--max-line-length=100', '--ignore=E115,E266'], }
 "let g:neomake_open_list = 2
@@ -353,8 +353,8 @@ nnoremap <silent> <c-h> :FZFMru<CR>
 " General
 " ----------------------------------
 
-let g:python_host_prog = '/usr/bin/python'
-let g:python3_host_prog = '/usr/bin/python3'
+let g:python_host_prog = '/usr/bin/python2'
+let g:python3_host_prog = '/usr/bin/python'
 
 syntax on
 " Ignore case when searching
@@ -443,6 +443,11 @@ let python_highlight_all = 1
 autocmd FileType python set sw=4
 autocmd FileType python set ts=4
 autocmd FileType python set sts=4
+
+" Indentation pour yaml
+autocmd FileType yaml setlocal ts=2 
+autocmd FileType yaml setlocal sts=2
+autocmd FileType yaml setlocal sw=2
 
 " Permet d'utiliser des .vimrc par projets et eviter les commandes dangereuses
 set exrc
