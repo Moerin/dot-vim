@@ -11,7 +11,7 @@ exe 'set rtp+=' . $GOPATH . '/src/github.com/junegunn/fzf'
 "-----------------------------------
 "dein Scripts
 if &compatible
-  set nocompatible               " Be iMproved
+    set nocompatible               " Be iMproved
 endif
 
 " Required:
@@ -84,6 +84,12 @@ call dein#add('zchee/deoplete-clang')
 " ====== PHP ======
 call dein#add('joonty/vdebug')
 
+" ====== ANSIBLE ======
+call dein#add('pearofducks/ansible-vim', {
+            \ 'build':
+            \'sh -c "cd ./UltiSnips; python2 generate.py"'
+            \})
+
 " ====== THEME ======
 call dein#add('joshdick/onedark.vim')
 call dein#add('freeo/vim-kalisi')
@@ -112,7 +118,7 @@ syntax enable
 
 "If you want to install not installed plugins on startup.
 if dein#check_install()
-  call dein#install()
+    call dein#install()
 endif
 
 call map(dein#check_clean(), "delete(v:val, 'rf')")
@@ -122,20 +128,20 @@ call map(dein#check_clean(), "delete(v:val, 'rf')")
 " Vdebug setup
 "-----------------------------------
 let g:vdebug_keymap = {
-\    "run" : "<Leader>/",
-\    "run_to_cursor" : "<Down>",
-\    "step_over" : "<Up>",
-\    "step_into" : "<Left>",
-\    "step_out" : "<Right>",
-\    "close" : "q",
-\    "detach" : "x",
-\    "set_breakpoint" : "<Leader>b",
-\    "eval_visual" : "<Leader>e"
-\}
+            \    "run" : "<Leader>/",
+            \    "run_to_cursor" : "<Down>",
+            \    "step_over" : "<Up>",
+            \    "step_into" : "<Left>",
+            \    "step_out" : "<Right>",
+            \    "close" : "q",
+            \    "detach" : "x",
+            \    "set_breakpoint" : "<Leader>b",
+            \    "eval_visual" : "<Leader>e"
+            \}
 
 let g:vdebug_options = {
-\    "break_on_open" : 0,
-\}
+            \    "break_on_open" : 0,
+            \}
 
 " Airline setup
 "-----------------------------------
@@ -222,19 +228,19 @@ let g:neomake_python_pep8_maker = { 'args': ['--max-line-length=100', '--ignore=
 "let g:neomake_open_list = 2
 
 function! LocationNext()
-  try
-    lnext
-  catch
-    try | lfirst | catch | endtry
-  endtry
+    try
+        lnext
+    catch
+        try | lfirst | catch | endtry
+    endtry
 endfunction
 
 function! LocationPrevious()                                                                  
-  try
-    lprev
-  catch
-    try | lfirst | catch | endtry
-  endtry
+    try
+        lprev
+    catch
+        try | lfirst | catch | endtry
+    endtry
 endfunction
 
 nnoremap <leader>e :call LocationNext()<cr>
@@ -265,15 +271,15 @@ let g:gruvbox_termcolors=256
 "let g:solarized_termcolors=256
 
 if has('nvim')
-  set t_ut=
-  set t_ZH=�[3m
-  set t_ZR=�[23m
+    set t_ut=
+    set t_ZH=�[3m
+    set t_ZR=�[23m
 
-  "let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-  let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+    "let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+    let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 
-  set ttimeout
-  set ttimeoutlen=0
+    set ttimeout
+    set ttimeoutlen=0
 
 endif
 
@@ -307,45 +313,45 @@ nmap <silent> <c-p> :FZF<CR>
 
 " Theme selector
 nnoremap <silent> <Leader>C :call fzf#run({
-\   'source':
-\     map(split(globpath(&rtp, "colors/*.vim"), "\n"),
-\         "substitute(fnamemodify(v:val, ':t'), '\\..\\{-}$', '', '')"),
-\   'sink':    'colo',
-\   'options': '+m',
-\   'left':    30
-\ })<CR>
+            \   'source':
+            \     map(split(globpath(&rtp, "colors/*.vim"), "\n"),
+            \         "substitute(fnamemodify(v:val, ':t'), '\\..\\{-}$', '', '')"),
+            \   'sink':    'colo',
+            \   'options': '+m',
+            \   'left':    30
+            \ })<CR>
 
 function! s:buflist()
-  redir => ls
-  silent ls
-  redir END
-  return split(ls, '\n')
+    redir => ls
+    silent ls
+    redir END
+    return split(ls, '\n')
 endfunction
 
 function! s:bufopen(e)
-  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
+    execute 'buffer' matchstr(a:e, '^[ 0-9]*')
 endfunction
 
 " List buffers
 nnoremap <silent> <Leader><Enter> :call fzf#run({
-\ 'source':  reverse(<sid>buflist()),
-\ 'sink':    function('<sid>bufopen'),
-\ 'options': '+m',
-\ 'down':    len(<sid>buflist()) + 2
-\ })<CR>
+            \ 'source':  reverse(<sid>buflist()),
+            \ 'sink':    function('<sid>bufopen'),
+            \ 'options': '+m',
+            \ 'down':    len(<sid>buflist()) + 2
+            \ })<CR>
 
 command! FZFMru call fzf#run({
-\ 'source':  reverse(s:all_files()),
-\ 'sink':    'edit',
-\ 'options': '-m -x +s',
-\ 'down':    '40%' })
+            \ 'source':  reverse(s:all_files()),
+            \ 'sink':    'edit',
+            \ 'options': '-m -x +s',
+            \ 'down':    '40%' })
 
 " For MRU files
 function! s:all_files()
-  return extend(
-  \ filter(copy(v:oldfiles),
-  \        "v:val !~ 'fugitive:\\|NERD_tree\\|^/tmp/\\|.git/'"),
-  \ map(filter(range(1, bufnr('$')), 'buflisted(v:val)'), 'bufname(v:val)'))
+    return extend(
+                \ filter(copy(v:oldfiles),
+                \        "v:val !~ 'fugitive:\\|NERD_tree\\|^/tmp/\\|.git/'"),
+                \ map(filter(range(1, bufnr('$')), 'buflisted(v:val)'), 'bufname(v:val)'))
 endfunction
 
 nnoremap <silent> <c-h> :FZFMru<CR> 
@@ -399,6 +405,7 @@ let g:UltiSnipsExpandTrigger       = "<C-j>"
 let g:UltiSnipsJumpForwardTrigger  = "<C-l>"
 let g:UltiSnipsJumpBackwardTrigger = "<C-h>"
 let g:UltiSnipsListSnippets        = "<C-k>" "List possible snippets based on current file
+let g:UltiSnipsSnippetsDir         = "~/.config/nvim/bundles/repos/github.com/honza/vim-snippets/UltiSnips"
 
 " Folding/Unfolding
 map <2-LeftMouse> za
@@ -461,31 +468,31 @@ au FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null
 
 " function
 function! DoPrettyXML()
-  " save the filetype so we can restore it later
-  let l:origft = &ft
-  set ft=
-  " delete the xml header if it exists. This will
-  " permit us to surround the document with fake tags
-  " without creating invalid xml.
-  1s/<?xml .*?>//e
-  " insert fake tags around the entire document.
-  " This will permit us to pretty-format excerpts of
-  " XML that may contain multiple top-level elements.
-  0put ='<PrettyXML>'
-  $put ='</PrettyXML>'
-  silent %!xmllint --format -
-  " xmllint will insert an <?xml?> header. it's easy enough to delete
-  " if you don't want it.
-  " delete the fake tags
-  2d
-  $d
-  " restore the 'normal' indentation, which is one extra level
-  " too deep due to the extra tags we wrapped around the document.
-  silent %<
-  " back to home
-  1
-  " restore the filetype
-  exe "set ft=" . l:origft
+    " save the filetype so we can restore it later
+    let l:origft = &ft
+    set ft=
+    " delete the xml header if it exists. This will
+    " permit us to surround the document with fake tags
+    " without creating invalid xml.
+    1s/<?xml .*?>//e
+    " insert fake tags around the entire document.
+    " This will permit us to pretty-format excerpts of
+    " XML that may contain multiple top-level elements.
+    0put ='<PrettyXML>'
+    $put ='</PrettyXML>'
+    silent %!xmllint --format -
+    " xmllint will insert an <?xml?> header. it's easy enough to delete
+    " if you don't want it.
+    " delete the fake tags
+    2d
+    $d
+    " restore the 'normal' indentation, which is one extra level
+    " too deep due to the extra tags we wrapped around the document.
+    silent %<
+    " back to home
+    1
+    " restore the filetype
+    exe "set ft=" . l:origft
 endfunction
 
 command! PrettyXML call DoPrettyXML()set secure
