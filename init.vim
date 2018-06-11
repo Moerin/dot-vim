@@ -1,5 +1,5 @@
 " Vimrc configuration file
-" Version : 2018-01
+" Version : 2018-06
 
 " Vundle configuration
 "-----------------------------------
@@ -33,11 +33,10 @@ call dein#add('tpope/vim-obsession')
 " ====== FILE FORMAT ======
 call dein#add('chrisbra/csv.vim')
 call dein#add('elzr/vim-json')
+call dein#add('iamcco/markdown-preview.vim')
 
 " ====== SNIPPET ======
 call dein#add('SirVer/ultisnips')
-"call dein#add('Shougo/neosnippet')
-"call dein#add('Shougo/neosnippet-snippets')
 call dein#add('honza/vim-snippets')
 
 " ====== SEARCH && REPLACE ======
@@ -55,6 +54,7 @@ call dein#add('Shougo/neoinclude.vim')
 call dein#add('tpope/vim-fugitive')
 call dein#add('sjl/gundo.vim')
 call dein#add('mhinz/vim-signify')
+call dein#add('tpope/vim-rhubarb')
 
 " ====== INTERFACE ======
 call dein#add('junegunn/fzf', { 'build': './install --all', 'merged': 0 })
@@ -65,6 +65,9 @@ call dein#add('jeffkreeftmeijer/vim-numbertoggle')
 call dein#add('Xuyuanp/nerdtree-git-plugin')
 call dein#add('scrooloose/nerdtree')
 call dein#add('ryanoasis/vim-devicons')
+
+" ====== MAPPINGS ======
+call dein#add('tpope/vim-unimpaired')
 
 " ====== PYTHON ======
 call dein#add('klen/python-mode')
@@ -81,11 +84,12 @@ call dein#add('nsf/gocode', {'rtp': 'nvim/'})
 " ====== C/C++ =======
 call dein#add('zchee/deoplete-clang')
 
-" ====== PHP ======
-call dein#add('joonty/vdebug')
-
 " ====== TERRAFORM ======
 call dein#add('hashivim/vim-terraform')
+call dein#add('juliosueiras/vim-terraform-completion')
+
+" ====== ANSIBLE ======
+call dein#add('pearofducks/ansible-vim')
 
 " ====== THEME ======
 call dein#add('joshdick/onedark.vim')
@@ -94,7 +98,6 @@ call dein#add('morhetz/gruvbox')
 
 " ====== SOURCE CODE ======
 call dein#add('ludovicchabant/vim-gutentags')
-"call dein#add('majutsushi/tagbar')
 
 " ====== FOLDING ======
 call dein#add('tmhedberg/SimpylFold')
@@ -122,24 +125,6 @@ call map(dein#check_clean(), "delete(v:val, 'rf')")
 
 "End dein Scripts-------------------------
 
-" Vdebug setup
-"-----------------------------------
-let g:vdebug_keymap = {
-\    "run" : "<Leader>/",
-\    "run_to_cursor" : "<Down>",
-\    "step_over" : "<Up>",
-\    "step_into" : "<Left>",
-\    "step_out" : "<Right>",
-\    "close" : "q",
-\    "detach" : "x",
-\    "set_breakpoint" : "<Leader>b",
-\    "eval_visual" : "<Leader>e"
-\}
-
-let g:vdebug_options = {
-\    "break_on_open" : 0,
-\}
-
 " Airline setup
 "-----------------------------------
 set laststatus=2
@@ -147,10 +132,6 @@ set statusline+=%{fugitive#statusline()}
 set statusline+=%{virtualenv#statusline()}
 let g:airline_powerline_fonts = 1 
 let g:airline#extensions#tabline#enabled=1
-"let g:airline_left_sep = "\uE0C0"
-"let g:airline_left_alt_sep = "\uE0C1"
-"let g:airline_right_sep = "\uE0C2"
-"let g:airline_right_alt_sep = "\uE0C3"
 
 " Gundo setup
 " ----------------------------------
@@ -193,6 +174,10 @@ let g:deoplete#sources#go#gocode_binary = '$GOPATH/bin/gocode'
 " C and C++
 let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-3.8/lib/libclang.so'
 let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-3.8/lib/clang/'
+
+" Terraform
+let g:deoplete#omni_patterns = {}
+let g:deoplete#omni_patterns.terraform = '[^ *\t"{=$]\w*'
 
 " NERDTree setup
 " ----------------------------------
@@ -280,15 +265,6 @@ if has('nvim')
 
 endif
 
-" Pymode setup
-" ----------------------------------
-let g:pymode = 1
-let g:pymode_folding = 1
-let g:pymode_rope_completion = 0
-let g:pymode_breakpoint_cmd = 'import ipdb; ipdb.set_trace()  # XXX BREAKPOINT'
-let g:pymode_lint = 0
-let g:pymode_rope_autoimport = 1
-
 " Enable folding with the spacebar
 nnoremap <space> za
 
@@ -300,13 +276,8 @@ let g:SimpylFold_docstring_preview=1
 nmap <leader>gj <plug>(signify-next-hunk)
 nmap <leader>gk <plug>(signify-prev-hunk)
 
-" TagBar setup
-" ----------------------------------
-nmap <F8> :TagbarToggle<CR>
-
 " FZF
 " ----------------------------------
-nmap <silent> <c-p> :FZF<CR>
 
 " Theme selector
 nnoremap <silent> <Leader>C :call fzf#run({
@@ -337,12 +308,6 @@ nnoremap <silent> <Leader><Enter> :call fzf#run({
 \ 'down':    len(<sid>buflist()) + 2
 \ })<CR>
 
-command! FZFMru call fzf#run({
-\ 'source':  reverse(s:all_files()),
-\ 'sink':    'edit',
-\ 'options': '-m -x +s',
-\ 'down':    '40%' })
-
 " For MRU files
 function! s:all_files()
   return extend(
@@ -351,13 +316,48 @@ function! s:all_files()
   \ map(filter(range(1, bufnr('$')), 'buflisted(v:val)'), 'bufname(v:val)'))
 endfunction
 
+command! FZFMru call fzf#run({
+\ 'source':  reverse(s:all_files()),
+\ 'sink':    'edit',
+\ 'options': '-m -x +s',
+\ 'down':    '40%' })
+
+nnoremap <silent> <c-p> :Files<CR>
 nnoremap <silent> <c-h> :FZFMru<CR> 
+nnoremap <silent> <leader>a :Buffers<CR>
+nnoremap <silent> <leader>A :Windows<CR>
+nnoremap <silent> <leader>; :BLines<CR>
+nnoremap <silent> <leader>o :BTags<CR>
+nnoremap <silent> <leader>O :Tags<CR>
+nnoremap <silent> <leader>r :History:<CR>
+nnoremap <silent> <leader>/ :History/<CR>
+
+nnoremap <silent> <leader>gl :Commits<CR>
+nnoremap <silent> <leader>ga :BCommits<CR>
+nnoremap <silent> <leader>ft :Filetypes<CR>
+
+" Mapping selecting mappings
+nmap <leader><tab> <plug>(fzf-maps-n)
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
+
+" Remove status line when fzf run
+autocmd! FileType fzf
+autocmd  FileType fzf set laststatus=0 noshowmode noruler
+  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+
+" MarkdownPreview setup
+" ----------------------------------
+nmap <silent> <F8> <Plug>MarkdownPreview        " for normal mode
+imap <silent> <F8> <Plug>MarkdownPreview        " for insert mode
+nmap <silent> <F9> <Plug>StopMarkdownPreview    " for normal mode
+imap <silent> <F9> <Plug>StopMarkdownPreview    " for insert mode
 
 " General
 " ----------------------------------
 
-let g:python_host_prog = '/usr/bin/python2'
-let g:python3_host_prog = '/usr/bin/python'
+let g:python_host_prog = '/usr/bin/python'
+let g:python3_host_prog = '/usr/local/bin/python3'
 
 syntax on
 " Ignore case when searching
@@ -394,6 +394,11 @@ set undoreload=10000 "maximum number lines to save for undo on a buffer reload
 " NerdTree activation
 "----------------------------------
 map <F2> <ESC>:NERDTreeToggle<CR>
+
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "◁",
+    \ }
+
 
 " UltiSnips
 " ----------------------------------
@@ -494,7 +499,6 @@ endfunction
 command! PrettyXML call DoPrettyXML()set secure
 
 " Tags
-"set tags=~/workspace/svn/lengow/php.tags;~/workspace/pymarketplaces/python.tags
 set tags=./tags
 
 " Vimgrep search
@@ -514,13 +518,6 @@ noremap <Up> <NOP>
 noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
-
-"" Remap TabKey
-"nnoremap <Tab> <Esc>
-"vnoremap <Tab> <Esc>gV
-"onoremap <Tab> <Esc>
-"inoremap <Tab> <Esc>`^
-"inoremap <Leader><Tab> <Tab>
 
 " Copy to clipboard
 vnoremap  <leader>y  "+y
@@ -553,7 +550,8 @@ nnoremap K i<CR><Esc>k$
 " use :W to sudo-write the current buffer
 " command! W w !sudo tee "%" > /dev/null
 command! W w !sudo dd of=%
-let g:NERDTreeIndicatorMapCustom = {
-    \ "Modified"  : "◁",
-    \ }
 
+" Mouse activation
+set mouse=a
+
+set wildignore+=*.pyc,tags,*.swp
