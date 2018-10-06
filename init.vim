@@ -1,107 +1,127 @@
 " Vimrc configuration file
-" Version : 2016-07
+" Version : 2018-06
 
 " Vundle configuration
 "-----------------------------------
-set nocompatible
 filetype off
 
 exe 'set rtp+=' . $GOPATH . '/src/github.com/junegunn/fzf'
 
-if has('nvim')
-    set rtp+=~/.config/nvim/bundle/Vundle.vim
-else
-    set rtp+=~/.vim/bundle/Vundle.vim
-endif
-
-call vundle#begin()
-
-" Vundle management (for updates)
-Plugin 'gmarik/Vundle.vim'
-
 " List of bundles (or extensions)
 "-----------------------------------
-Plugin 'bling/vim-airline'
-Plugin 'vimwiki/vimwiki'
-Plugin 'tpope/vim-fugitive'
-Plugin 'scrooloose/nerdtree'
-Plugin 'tpope/vim-surround'
-Plugin 'vim-scripts/Align'
-Plugin 'mattn/emmet-vim'
-Plugin 'klen/python-mode'
-Plugin 'jeffkreeftmeijer/vim-numbertoggle'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'elzr/vim-json'
-Plugin 'jlanzarotta/bufexplorer'
-Plugin 'SirVer/ultisnips'
-Plugin 'honza/vim-snippets'
-Plugin 'nathanaelkane/vim-indent-guides'
-Plugin 'mhinz/vim-signify'
-Plugin 'majutsushi/tagbar'
-Plugin 'vim-scripts/BufOnly.vim'
-Plugin 'chrisbra/csv.vim'
-Plugin 'Xuyuanp/nerdtree-git-plugin'
-Plugin 'tpope/vim-abolish'
-Plugin 'mileszs/ack.vim'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'evidens/vim-twig'
-Plugin 'junegunn/fzf'
-Plugin 'junegunn/fzf.vim'
-Plugin 'ryanoasis/vim-devicons'
-Plugin 'benmills/vimux'
-Plugin 'freeo/vim-kalisi'
-Plugin 'hdima/python-syntax'
-Plugin 'morhetz/gruvbox'
-Plugin 'matchit.zip'
-Plugin 'fatih/vim-go'
-Plugin 'zchee/deoplete-go', { 'do': 'make'}
-Plugin 'zchee/deoplete-jedi'
-Plugin 'joshdick/onedark.vim'
-Plugin 'tpope/vim-obsession'
-Plugin 'Shougo/deoplete.nvim'
-Plugin 'junegunn/vim-peekaboo'
-Plugin 'sjl/gundo.vim'
-Plugin 'tmhedberg/SimpylFold'
-Plugin 'vim-scripts/indentpython.vim'
-Plugin 'jmcantrell/vim-virtualenv'
-Plugin 'Shougo/echodoc.vim'
-Plugin 'xolox/vim-misc'
-Plugin 'joonty/vdebug'
-Plugin 'diepm/vim-rest-console'
-Plugin 'nsf/gocode', {'rtp': 'nvim/'}
-Plugin 'Konfekt/FastFold'
-Plugin 'neomake/neomake'
+"dein Scripts
+if &compatible
+  set nocompatible               " Be iMproved
+endif
 
-"--------------"
-"Outdated Plugin"
-"--------------"
+" Required:
+set runtimepath+=$HOME/.config/nvim/bundles/repos/github.com/Shougo/dein.vim
 
-"Plugin 'scrooloose/syntastic'
-"Plugin 'xolox/vim-easytags'
-"Plugin 'Valloric/YouCompleteMe'
-"Plugin 'joonty/vim-taggatron'
-"Plugin 'jistr/vim-nerdtree-tabs'
+" Required:
+if dein#load_state("$HOME/.config/nvim/bundles")
+    call dein#begin("$HOME/.config/nvim/bundles")
 
-call vundle#end()
+    " Let dein manage dein
+    " Required:
+    call dein#add('Shougo/dein.vim')
+    call dein#add('haya14busa/dein-command.vim')
+
+    " Add or remove your plugins here:
+    call dein#add('scrooloose/nerdcommenter')
+    call dein#add('evidens/vim-twig')
+    call dein#add('benmills/vimux')
+    call dein#add('tpope/vim-obsession')
+
+    " ====== FILE FORMAT ======
+    call dein#add('chrisbra/csv.vim')
+    call dein#add('elzr/vim-json')
+    call dein#add('iamcco/markdown-preview.vim')
+
+    " ====== SNIPPET ======
+    call dein#add('SirVer/ultisnips')
+    call dein#add('honza/vim-snippets')
+
+    " ====== SEARCH && REPLACE ======
+    "call dein#add('mileszs/ack.vim')
+    call dein#add('dyng/ctrlsf.vim')
+    call dein#add('tpope/vim-abolish')
+    call dein#add('tpope/vim-surround')
+
+    " ====== COMPILATION - LITING ======
+    call dein#add('neomake/neomake')
+    call dein#add('Shougo/deoplete.nvim')
+    call dein#add('Shougo/echodoc.vim')
+    call dein#add('Shougo/neoinclude.vim')
+
+    " ====== GIT ======
+    call dein#add('tpope/vim-fugitive')
+    call dein#add('sjl/gundo.vim')
+    call dein#add('mhinz/vim-signify')
+    call dein#add('tpope/vim-rhubarb')
+
+    " ====== INTERFACE ======
+    call dein#add('junegunn/fzf', { 'build': './install --all', 'merged': 0 })
+    call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
+    call dein#add('nathanaelkane/vim-indent-guides')
+    call dein#add('bling/vim-airline')
+    call dein#add('jeffkreeftmeijer/vim-numbertoggle')
+    call dein#add('Xuyuanp/nerdtree-git-plugin')
+    call dein#add('scrooloose/nerdtree')
+    call dein#add('ryanoasis/vim-devicons')
+    call dein#add('liuchengxu/vim-which-key')
+
+    " ====== MAPPINGS ======
+    call dein#add('tpope/vim-unimpaired')
+
+    " ====== PYTHON ======
+    call dein#add('zchee/deoplete-jedi')
+    call dein#add('vim-scripts/indentpython.vim')
+    call dein#add('jmcantrell/vim-virtualenv')
+    call dein#add('hdima/python-syntax')
+
+    " ====== GOLANG ======
+    call dein#add('fatih/vim-go')
+    call dein#add('zchee/deoplete-go', {'build': 'make'})
+    call dein#add('nsf/gocode', {'rtp': 'nvim/'})
+
+    " ====== C/C++ =======
+    call dein#add('zchee/deoplete-clang')
+
+    " ====== TERRAFORM ======
+    call dein#add('hashivim/vim-terraform')
+    call dein#add('juliosueiras/vim-terraform-completion')
+
+    " ====== ANSIBLE ======
+    call dein#add('pearofducks/ansible-vim')
+
+    " ====== THEME ======
+    call dein#add('joshdick/onedark.vim')
+    call dein#add('freeo/vim-kalisi')
+    call dein#add('morhetz/gruvbox')
+
+    " ====== SOURCE CODE ======
+    call dein#add('ludovicchabant/vim-gutentags')
+
+    " ====== FOLDING ======
+    call dein#add('tmhedberg/SimpylFold')
+    call dein#add('Konfekt/FastFold')
+
+    " ====== FUN =====
+    call dein#add('rbtnn/game_engine.vim')
+    call dein#add('rbtnn/mario.vim')
+
+    " You can specify revision/branch/tag.
+
+    " Required:
+    call dein#end()
+    call dein#save_state()
+endif
+
+" Required:
 filetype plugin indent on
+syntax enable
 
-" Vdebug setup
-"-----------------------------------
-let g:vdebug_keymap = {
-\    "run" : "<Leader>/",
-\    "run_to_cursor" : "<Down>",
-\    "step_over" : "<Up>",
-\    "step_into" : "<Left>",
-\    "step_out" : "<Right>",
-\    "close" : "q",
-\    "detach" : "x",
-\    "set_breakpoint" : "<Leader>b",
-\    "eval_visual" : "<Leader>e"
-\}
-
-let g:vdebug_options = {
-\    "break_on_open" : 0,
-\}
+"End dein Scripts-------------------------
 
 " Airline setup
 "-----------------------------------
@@ -114,7 +134,6 @@ let g:airline#extensions#tabline#enabled=1
 " Gundo setup
 " ----------------------------------
 nnoremap <F6> :GundoToggle<CR>
-set guifont=Sauce\ Code\ Powerline\ Plus\ Nerd\ File\ Types\ Mono\ Plus\ Font\ Awesome\ Plus\ Octicons\ Plus\ Pomicons\ 10
 
 " Vimwiki setup
 " ----------------------------------
@@ -143,11 +162,19 @@ inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 
 autocmd FileType python setlocal omnifunc=jedi#completions
 
-set noshowmode
 let g:echodoc_enable_at_startup = 1
 
 let g:deoplete#sources#jedi#show_docstring = 1
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+let g:deoplete#sources#go#gocode_binary = '$GOPATH/bin/gocode'
+
+" C and C++
+let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-3.8/lib/libclang.so'
+let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-3.8/lib/clang/'
+
+" Terraform
+let g:deoplete#omni_patterns = {}
+let g:deoplete#omni_patterns.terraform = '[^ *\t"{=$]\w*'
 
 " NERDTree setup
 " ----------------------------------
@@ -174,7 +201,7 @@ augroup END
 
 " Neomake
 " ----------------------------------
-let g:neomake_python_enabled_makers = ['flake8', 'pep8']
+let g:neomake_python_enabled_makers = ['flake8', 'pep8', 'pylama']
 let g:neomake_python_flake8_maker = { 'args': ['--ignore=E501, E702, F403'], }
 let g:neomake_python_pep8_maker = { 'args': ['--max-line-length=100', '--ignore=E115,E266'], }
 "let g:neomake_open_list = 2
@@ -204,26 +231,6 @@ nnoremap <leader><S-e> :call LocationPrevious()<cr>
 
 autocmd! BufWritePost * Neomake
 
-" Syntactic
-" ----------------------------------
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_enable_signs = 1
-"" Not work
-"highlight SyntasticWarningSign guifg=white guibg=red
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_w = 1
-"let g:syntastic_python_checkers = ['flake8']
-"let g:syntastic_auto_jump = 2 
-"" Disable warning level in loc_list for all checker
-"let g:syntastic_quiet_messages = { "level": "warnings" }
-"" Change format of print
-"let g:syntastic_python_flake8_args='--ignore=E501,F403,E702'
-
 " Colorscheme
 " ----------------------------------
 set timeout
@@ -247,29 +254,10 @@ if has('nvim')
   set t_ZH=�[3m
   set t_ZR=�[23m
 
-  "let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-  let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-
   set ttimeout
   set ttimeoutlen=0
 
-  "let g:solarized_italic=0
 endif
-
-if has("gui_running")
-    syntax enable
-    set background=dark
-    colorscheme solarized
-endif
-
-" Pymode setup
-" ----------------------------------
-let g:pymode = 1
-let g:pymode_folding = 1
-let g:pymode_rope_completion = 0
-let g:pymode_breakpoint_cmd = 'import ipdb; ipdb.set_trace()  # XXX BREAKPOINT'
-let g:pymode_lint = 0
-let g:pymode_rope_autoimport = 1
 
 " Enable folding with the spacebar
 nnoremap <space> za
@@ -282,14 +270,10 @@ let g:SimpylFold_docstring_preview=1
 nmap <leader>gj <plug>(signify-next-hunk)
 nmap <leader>gk <plug>(signify-prev-hunk)
 
-" TagBar setup
-" ----------------------------------
-nmap <F8> :TagbarToggle<CR>
-
 " FZF
 " ----------------------------------
-nmap <silent> <c-p> :FZF<CR>
 
+" Theme selector
 nnoremap <silent> <Leader>C :call fzf#run({
 \   'source':
 \     map(split(globpath(&rtp, "colors/*.vim"), "\n"),
@@ -310,6 +294,7 @@ function! s:bufopen(e)
   execute 'buffer' matchstr(a:e, '^[ 0-9]*')
 endfunction
 
+" List buffers
 nnoremap <silent> <Leader><Enter> :call fzf#run({
 \ 'source':  reverse(<sid>buflist()),
 \ 'sink':    function('<sid>bufopen'),
@@ -317,12 +302,7 @@ nnoremap <silent> <Leader><Enter> :call fzf#run({
 \ 'down':    len(<sid>buflist()) + 2
 \ })<CR>
 
-command! FZFMru call fzf#run({
-\ 'source':  reverse(s:all_files()),
-\ 'sink':    'edit',
-\ 'options': '-m -x +s',
-\ 'down':    '40%' })
-
+" For MRU files
 function! s:all_files()
   return extend(
   \ filter(copy(v:oldfiles),
@@ -330,13 +310,48 @@ function! s:all_files()
   \ map(filter(range(1, bufnr('$')), 'buflisted(v:val)'), 'bufname(v:val)'))
 endfunction
 
+command! FZFMru call fzf#run({
+\ 'source':  reverse(s:all_files()),
+\ 'sink':    'edit',
+\ 'options': '-m -x +s',
+\ 'down':    '40%' })
+
+nnoremap <silent> <c-p> :Files<CR>
 nnoremap <silent> <c-h> :FZFMru<CR> 
+nnoremap <silent> <leader>a :Buffers<CR>
+nnoremap <silent> <leader>A :Windows<CR>
+nnoremap <silent> <leader>; :BLines<CR>
+nnoremap <silent> <leader>o :BTags<CR>
+nnoremap <silent> <leader>O :Tags<CR>
+nnoremap <silent> <leader>r :History:<CR>
+nnoremap <silent> <leader>/ :History/<CR>
+
+nnoremap <silent> <leader>gl :Commits<CR>
+nnoremap <silent> <leader>ga :BCommits<CR>
+nnoremap <silent> <leader>ft :Filetypes<CR>
+
+" Mapping selecting mappings
+nmap <leader><tab> <plug>(fzf-maps-n)
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
+
+" Remove status line when fzf run
+autocmd! FileType fzf
+autocmd  FileType fzf set laststatus=0 noshowmode noruler
+  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+
+" MarkdownPreview setup
+" ----------------------------------
+nmap <silent> <F8> <Plug>MarkdownPreview        " for normal mode
+imap <silent> <F8> <Plug>MarkdownPreview        " for insert mode
+nmap <silent> <F9> <Plug>StopMarkdownPreview    " for normal mode
+imap <silent> <F9> <Plug>StopMarkdownPreview    " for insert mode
 
 " General
 " ----------------------------------
 
-let g:python_host_prog = '/usr/bin/python'
-let g:python3_host_prog = '/usr/bin/python3'
+let g:python_host_prog = '/usr/local/bin/python'
+let g:python3_host_prog = '/usr/local/bin/python3'
 
 syntax on
 " Ignore case when searching
@@ -351,7 +366,7 @@ nnoremap <silent> <F12> :bn<CR>
 nnoremap <silent> <S-F12> :bp<CR>
 
 " Put plugins and dictionaries in this dir (also on Windows)
-let vimDir = '$HOME/.vim'
+let vimDir = '$HOME/.config/nvim'
 let &runtimepath.=','.vimDir
 
 " Keep undo history across sessions by storing it in a file
@@ -374,20 +389,21 @@ set undoreload=10000 "maximum number lines to save for undo on a buffer reload
 "----------------------------------
 map <F2> <ESC>:NERDTreeToggle<CR>
 
+let g:NERDTreeIndicatorMapCustom = {
+    \ "Modified"  : "◁",
+    \ }
+
+
 " UltiSnips
 " ----------------------------------
-let g:UltiSnipsExpandTrigger       = "<c-j>"
-let g:UltiSnipsJumpForwardTrigger  = "<c-l>"
-let g:UltiSnipsJumpBackwardTrigger = "<c-h>"
-let g:UltiSnipsListSnippets        = "<c-k>" "List possible snippets based on current file
+
+let g:UltiSnipsExpandTrigger       = "<C-j>"
+let g:UltiSnipsJumpForwardTrigger  = "<C-l>"
+let g:UltiSnipsJumpBackwardTrigger = "<C-h>"
+let g:UltiSnipsListSnippets        = "<C-k>" "List possible snippets based on current file
 
 " Folding/Unfolding
 map <2-LeftMouse> za
-
-" Buffers - explore/next/previous: Alt-F12, F12, Shift-F12.
-nnoremap <silent> <M-F12> :BufExplorer<CR>
-nnoremap <silent> <F12> :bn<CR>
-nnoremap <silent> <S-F12> :bp<CR>
 
 " Affichage des numeros de ligne
 set number
@@ -429,6 +445,11 @@ let python_highlight_all = 1
 autocmd FileType python set sw=4
 autocmd FileType python set ts=4
 autocmd FileType python set sts=4
+
+" Indentation pour yaml
+autocmd FileType yaml setlocal ts=2 
+autocmd FileType yaml setlocal sts=2
+autocmd FileType yaml setlocal sw=2
 
 " Permet d'utiliser des .vimrc par projets et eviter les commandes dangereuses
 set exrc
@@ -472,11 +493,17 @@ endfunction
 command! PrettyXML call DoPrettyXML()set secure
 
 " Tags
-set tags=~/workspace/svn/lengow/php.tags;~/workspace/pymarketplaces/python.tags
+set tags=./tags
 
-" Vimgrep search
-nmap <leader>F :Ack!
-nmap <leader>Fp :Ack! --python 
+" ctrlsf.vim search
+nmap <leader>f <Plug>CtrlSFPrompt
+vmap     <leader>f <Plug>CtrlSFVwordPath
+vmap     <leader>F <Plug>CtrlSFVwordExec
+nmap     <leader>n <Plug>CtrlSFCwordPath
+nmap     <leader>p <Plug>CtrlSFPwordPath
+nnoremap <leader>o :CtrlSFOpen<CR>
+nnoremap <leader>t :CtrlSFToggle<CR>
+inoremap <leader>t <Esc>:CtrlSFToggle<CR>
 
 " Redraw fix
 imap <silent> <c-l> <c-o>:redraw!<CR>
@@ -491,13 +518,6 @@ noremap <Up> <NOP>
 noremap <Down> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
-
-"" Remap TabKey
-"nnoremap <Tab> <Esc>
-"vnoremap <Tab> <Esc>gV
-"onoremap <Tab> <Esc>
-"inoremap <Tab> <Esc>`^
-"inoremap <Leader><Tab> <Tab>
 
 " Copy to clipboard
 vnoremap  <leader>y  "+y
@@ -530,3 +550,11 @@ nnoremap K i<CR><Esc>k$
 " use :W to sudo-write the current buffer
 " command! W w !sudo tee "%" > /dev/null
 command! W w !sudo dd of=%
+
+" Mouse activation
+set mouse=a
+
+set wildignore+=*.pyc,tags,*.swp
+
+" Used for cmdheight
+set noshowmode
