@@ -18,110 +18,108 @@ endif
 set runtimepath+=$HOME/.config/nvim/bundles/repos/github.com/Shougo/dein.vim
 
 " Required:
-call dein#begin("$HOME/.config/nvim/bundles")
+if dein#load_state("$HOME/.config/nvim/bundles")
+    call dein#begin("$HOME/.config/nvim/bundles")
 
-" Let dein manage dein
-" Required:
-call dein#add('Shougo/dein.vim')
+    " Let dein manage dein
+    " Required:
+    call dein#add('Shougo/dein.vim')
+    call dein#add('haya14busa/dein-command.vim')
 
-" Add or remove your plugins here:
-call dein#add('scrooloose/nerdcommenter')
-call dein#add('evidens/vim-twig')
-call dein#add('benmills/vimux')
-call dein#add('tpope/vim-obsession')
+    " Add or remove your plugins here:
+    call dein#add('scrooloose/nerdcommenter')
+    call dein#add('evidens/vim-twig')
+    call dein#add('benmills/vimux')
+    call dein#add('tpope/vim-obsession')
 
-" ====== FILE FORMAT ======
-call dein#add('chrisbra/csv.vim')
-call dein#add('elzr/vim-json')
-call dein#add('iamcco/markdown-preview.vim')
+    " ====== FILE FORMAT ======
+    call dein#add('chrisbra/csv.vim')
+    call dein#add('elzr/vim-json')
+    call dein#add('iamcco/markdown-preview.vim')
 
-" ====== SNIPPET ======
-call dein#add('SirVer/ultisnips')
-call dein#add('honza/vim-snippets')
+    " ====== SNIPPET ======
+    call dein#add('SirVer/ultisnips')
+    call dein#add('honza/vim-snippets')
 
-" ====== SEARCH && REPLACE ======
-call dein#add('mileszs/ack.vim')
-call dein#add('tpope/vim-abolish')
-call dein#add('tpope/vim-surround')
+    " ====== SEARCH && REPLACE ======
+    "call dein#add('mileszs/ack.vim')
+    call dein#add('dyng/ctrlsf.vim')
+    call dein#add('tpope/vim-abolish')
+    call dein#add('tpope/vim-surround')
 
-" ====== COMPILATION - LITING ======
-call dein#add('neomake/neomake')
-call dein#add('Shougo/deoplete.nvim')
-call dein#add('Shougo/echodoc.vim')
-call dein#add('Shougo/neoinclude.vim')
+    " ====== COMPILATION - LITING ======
+    call dein#add('neomake/neomake')
+    call dein#add('Shougo/deoplete.nvim')
+    call dein#add('Shougo/echodoc.vim')
+    call dein#add('Shougo/neoinclude.vim')
 
-" ====== GIT ======
-call dein#add('tpope/vim-fugitive')
-call dein#add('sjl/gundo.vim')
-call dein#add('mhinz/vim-signify')
-call dein#add('tpope/vim-rhubarb')
+    " ====== GIT ======
+    call dein#add('tpope/vim-fugitive')
+    call dein#add('sjl/gundo.vim')
+    call dein#add('mhinz/vim-signify')
+    call dein#add('tpope/vim-rhubarb')
 
-" ====== INTERFACE ======
-call dein#add('junegunn/fzf', { 'build': './install --all', 'merged': 0 })
-call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
-call dein#add('nathanaelkane/vim-indent-guides')
-call dein#add('bling/vim-airline')
-call dein#add('jeffkreeftmeijer/vim-numbertoggle')
-call dein#add('Xuyuanp/nerdtree-git-plugin')
-call dein#add('scrooloose/nerdtree')
-call dein#add('ryanoasis/vim-devicons')
+    " ====== INTERFACE ======
+    call dein#add('junegunn/fzf', { 'build': './install --all', 'merged': 0 })
+    call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
+    call dein#add('nathanaelkane/vim-indent-guides')
+    call dein#add('bling/vim-airline')
+    call dein#add('jeffkreeftmeijer/vim-numbertoggle')
+    call dein#add('Xuyuanp/nerdtree-git-plugin')
+    call dein#add('scrooloose/nerdtree')
+    call dein#add('ryanoasis/vim-devicons')
+    call dein#add('liuchengxu/vim-which-key')
 
-" ====== MAPPINGS ======
-call dein#add('tpope/vim-unimpaired')
+    " ====== MAPPINGS ======
+    call dein#add('tpope/vim-unimpaired')
 
-" ====== PYTHON ======
-call dein#add('klen/python-mode')
-call dein#add('zchee/deoplete-jedi')
-call dein#add('vim-scripts/indentpython.vim')
-call dein#add('jmcantrell/vim-virtualenv')
-call dein#add('hdima/python-syntax')
+    " ====== PYTHON ======
+    call dein#add('zchee/deoplete-jedi')
+    call dein#add('vim-scripts/indentpython.vim')
+    call dein#add('jmcantrell/vim-virtualenv')
+    call dein#add('hdima/python-syntax')
 
-" ====== GOLANG ======
-call dein#add('fatih/vim-go')
-call dein#add('zchee/deoplete-go', {'build': 'make'})
-call dein#add('nsf/gocode', {'rtp': 'nvim/'})
+    " ====== GOLANG ======
+    call dein#add('fatih/vim-go')
+    call dein#add('zchee/deoplete-go', {'build': 'make'})
+    call dein#add('nsf/gocode', {'rtp': 'nvim/'})
 
-" ====== C/C++ =======
-call dein#add('zchee/deoplete-clang')
+    " ====== C/C++ =======
+    call dein#add('zchee/deoplete-clang')
 
-" ====== TERRAFORM ======
-call dein#add('hashivim/vim-terraform')
-call dein#add('juliosueiras/vim-terraform-completion')
+    " ====== TERRAFORM ======
+    call dein#add('hashivim/vim-terraform')
+    call dein#add('juliosueiras/vim-terraform-completion')
 
-" ====== ANSIBLE ======
-call dein#add('pearofducks/ansible-vim')
+    " ====== ANSIBLE ======
+    call dein#add('pearofducks/ansible-vim')
 
-" ====== THEME ======
-call dein#add('joshdick/onedark.vim')
-call dein#add('freeo/vim-kalisi')
-call dein#add('morhetz/gruvbox')
+    " ====== THEME ======
+    call dein#add('joshdick/onedark.vim')
+    call dein#add('freeo/vim-kalisi')
+    call dein#add('morhetz/gruvbox')
 
-" ====== SOURCE CODE ======
-call dein#add('ludovicchabant/vim-gutentags')
+    " ====== SOURCE CODE ======
+    call dein#add('ludovicchabant/vim-gutentags')
 
-" ====== FOLDING ======
-call dein#add('tmhedberg/SimpylFold')
-call dein#add('Konfekt/FastFold')
+    " ====== FOLDING ======
+    call dein#add('tmhedberg/SimpylFold')
+    call dein#add('Konfekt/FastFold')
 
-" ====== FUN =====
-call dein#add('rbtnn/game_engine.vim')
-call dein#add('rbtnn/mario.vim')
+    " ====== FUN =====
+    call dein#add('rbtnn/game_engine.vim')
+    call dein#add('rbtnn/mario.vim')
 
-" You can specify revision/branch/tag.
+    " You can specify revision/branch/tag.
 
-" Required:
-call dein#end()
+    " Required:
+    call dein#end()
+    call dein#save_state()
+endif
 
 " Required:
 filetype plugin indent on
 syntax enable
-
-"If you want to install not installed plugins on startup.
-if dein#check_install()
-  call dein#install()
-endif
-
-call map(dein#check_clean(), "delete(v:val, 'rf')")
 
 "End dein Scripts-------------------------
 
@@ -164,7 +162,6 @@ inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 
 autocmd FileType python setlocal omnifunc=jedi#completions
 
-set noshowmode
 let g:echodoc_enable_at_startup = 1
 
 let g:deoplete#sources#jedi#show_docstring = 1
@@ -256,9 +253,6 @@ if has('nvim')
   set t_ut=
   set t_ZH=�[3m
   set t_ZR=�[23m
-
-  "let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-  let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 
   set ttimeout
   set ttimeoutlen=0
@@ -356,7 +350,7 @@ imap <silent> <F9> <Plug>StopMarkdownPreview    " for insert mode
 " General
 " ----------------------------------
 
-let g:python_host_prog = '/usr/bin/python'
+let g:python_host_prog = '/usr/local/bin/python'
 let g:python3_host_prog = '/usr/local/bin/python3'
 
 syntax on
@@ -501,9 +495,15 @@ command! PrettyXML call DoPrettyXML()set secure
 " Tags
 set tags=./tags
 
-" Vimgrep search
-nmap <leader>F :Ack! 
-nmap <leader>Fp :Ack! --python 
+" ctrlsf.vim search
+nmap <leader>f <Plug>CtrlSFPrompt
+vmap     <leader>f <Plug>CtrlSFVwordPath
+vmap     <leader>F <Plug>CtrlSFVwordExec
+nmap     <leader>n <Plug>CtrlSFCwordPath
+nmap     <leader>p <Plug>CtrlSFPwordPath
+nnoremap <leader>o :CtrlSFOpen<CR>
+nnoremap <leader>t :CtrlSFToggle<CR>
+inoremap <leader>t <Esc>:CtrlSFToggle<CR>
 
 " Redraw fix
 imap <silent> <c-l> <c-o>:redraw!<CR>
@@ -555,3 +555,6 @@ command! W w !sudo dd of=%
 set mouse=a
 
 set wildignore+=*.pyc,tags,*.swp
+
+" Used for cmdheight
+set noshowmode
