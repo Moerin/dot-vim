@@ -1,5 +1,5 @@
 " Vimrc configuration file
-" Version : 2018-06
+" Version : 2018-10
 
 " Vundle configuration
 "-----------------------------------
