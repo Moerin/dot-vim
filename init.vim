@@ -1,5 +1,5 @@
 " Vimrc configuration file
-" Version : 2018-10
+" Version : 2018-11
 
 " Vundle configuration
 "-----------------------------------
@@ -42,7 +42,6 @@ if dein#load_state("$HOME/.config/nvim/bundles")
     call dein#add('honza/vim-snippets')
 
     " ====== SEARCH && REPLACE ======
-    "call dein#add('mileszs/ack.vim')
     call dein#add('dyng/ctrlsf.vim')
     call dein#add('tpope/vim-abolish')
     call dein#add('tpope/vim-surround')
@@ -94,6 +93,9 @@ if dein#load_state("$HOME/.config/nvim/bundles")
     " ====== ANSIBLE ======
     call dein#add('pearofducks/ansible-vim')
 
+    " ====== MUSTACHE ======
+    call dein#add('mustache/vim-mustache-handlebars')
+
     " ====== THEME ======
     call dein#add('joshdick/onedark.vim')
     call dein#add('freeo/vim-kalisi')
@@ -106,8 +108,11 @@ if dein#load_state("$HOME/.config/nvim/bundles")
     call dein#add('tmhedberg/SimpylFold')
     call dein#add('Konfekt/FastFold')
 
+    " ====== PRODUCTIVITY ======
+    call dein#add('xolox/vim-notes')
+    call dein#add('xolox/vim-misc')
+
     " ====== FUN =====
-    call dein#add('rbtnn/game_engine.vim')
     call dein#add('rbtnn/mario.vim')
 
     " You can specify revision/branch/tag.
@@ -141,7 +146,7 @@ let g:vimwiki_list=[{'path':'~/.vim/vimwiki'}]
 
 " Vimux setup
 " ----------------------------------
-map <Leader>ps :call VimuxRunCommand("v3; python manage.py shell;")<CR>
+map <Leader>ps :call VimuxRunCommand("ipython;")<CR>
 map <Leader>vp :VimuxPromptCommand<CR>
 " Close vim tmux runner opened by VimuxRunCommand
 map <Leader>vq :VimuxCloseRunner<CR>
@@ -283,25 +288,6 @@ nnoremap <silent> <Leader>C :call fzf#run({
 \   'left':    30
 \ })<CR>
 
-function! s:buflist()
-  redir => ls
-  silent ls
-  redir END
-  return split(ls, '\n')
-endfunction
-
-function! s:bufopen(e)
-  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
-endfunction
-
-" List buffers
-nnoremap <silent> <Leader><Enter> :call fzf#run({
-\ 'source':  reverse(<sid>buflist()),
-\ 'sink':    function('<sid>bufopen'),
-\ 'options': '+m',
-\ 'down':    len(<sid>buflist()) + 2
-\ })<CR>
-
 " For MRU files
 function! s:all_files()
   return extend(
@@ -318,7 +304,7 @@ command! FZFMru call fzf#run({
 
 nnoremap <silent> <c-p> :Files<CR>
 nnoremap <silent> <c-h> :FZFMru<CR> 
-nnoremap <silent> <leader>a :Buffers<CR>
+nnoremap <silent> <leader>B :Buffers<CR>
 nnoremap <silent> <leader>A :Windows<CR>
 nnoremap <silent> <leader>; :BLines<CR>
 nnoremap <silent> <leader>o :BTags<CR>
@@ -347,9 +333,13 @@ imap <silent> <F8> <Plug>MarkdownPreview        " for insert mode
 nmap <silent> <F9> <Plug>StopMarkdownPreview    " for normal mode
 imap <silent> <F9> <Plug>StopMarkdownPreview    " for insert mode
 
+" vim-notes
+" ----------------------------------
+let g:notes_directories = ['~/OneDrive - Talend/Notes']
+
+
 " General
 " ----------------------------------
-
 let g:python_host_prog = '/usr/local/bin/python'
 let g:python3_host_prog = '/usr/local/bin/python3'
 
@@ -396,7 +386,6 @@ let g:NERDTreeIndicatorMapCustom = {
 
 " UltiSnips
 " ----------------------------------
-
 let g:UltiSnipsExpandTrigger       = "<C-j>"
 let g:UltiSnipsJumpForwardTrigger  = "<C-l>"
 let g:UltiSnipsJumpBackwardTrigger = "<C-h>"
