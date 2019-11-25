@@ -1,5 +1,5 @@
 " Vimrc configuration file
-" Version : 2018-11
+" Version : 2019-11
 
 " Vundle configuration
 "-----------------------------------
@@ -29,13 +29,12 @@ if dein#load_state("$HOME/.config/nvim/bundles")
     " Add or remove your plugins here:
     call dein#add('scrooloose/nerdcommenter')
     call dein#add('evidens/vim-twig')
-    call dein#add('benmills/vimux')
     call dein#add('tpope/vim-obsession')
+    call dein#add('junegunn/vader.vim')
 
     " ====== FILE FORMAT ======
     call dein#add('chrisbra/csv.vim')
     call dein#add('elzr/vim-json')
-    call dein#add('iamcco/markdown-preview.vim')
 
     " ====== SNIPPET ======
     call dein#add('SirVer/ultisnips')
@@ -45,6 +44,7 @@ if dein#load_state("$HOME/.config/nvim/bundles")
     call dein#add('dyng/ctrlsf.vim')
     call dein#add('tpope/vim-abolish')
     call dein#add('tpope/vim-surround')
+    call dein#add('markonm/traces.vim')
 
     " ====== COMPILATION - LITING ======
     call dein#add('neomake/neomake')
@@ -57,17 +57,16 @@ if dein#load_state("$HOME/.config/nvim/bundles")
     call dein#add('sjl/gundo.vim')
     call dein#add('mhinz/vim-signify')
     call dein#add('tpope/vim-rhubarb')
+    call dein#add('fszymanski/deoplete-emoji')
 
     " ====== INTERFACE ======
     call dein#add('junegunn/fzf', { 'build': './install --all', 'merged': 0 })
     call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
     call dein#add('nathanaelkane/vim-indent-guides')
     call dein#add('bling/vim-airline')
-    call dein#add('jeffkreeftmeijer/vim-numbertoggle')
     call dein#add('Xuyuanp/nerdtree-git-plugin')
     call dein#add('scrooloose/nerdtree')
     call dein#add('ryanoasis/vim-devicons')
-    call dein#add('liuchengxu/vim-which-key')
 
     " ====== MAPPINGS ======
     call dein#add('tpope/vim-unimpaired')
@@ -92,6 +91,7 @@ if dein#load_state("$HOME/.config/nvim/bundles")
 
     " ====== ANSIBLE ======
     call dein#add('pearofducks/ansible-vim')
+    call dein#add('arouene/vim-ansible-vault')
 
     " ====== MUSTACHE ======
     call dein#add('mustache/vim-mustache-handlebars')
@@ -109,8 +109,7 @@ if dein#load_state("$HOME/.config/nvim/bundles")
     call dein#add('Konfekt/FastFold')
 
     " ====== PRODUCTIVITY ======
-    call dein#add('xolox/vim-notes')
-    call dein#add('xolox/vim-misc')
+    call dein#add('iamcco/markdown-preview.vim')
 
     " ====== FUN =====
     call dein#add('rbtnn/mario.vim')
@@ -136,6 +135,10 @@ set statusline+=%{virtualenv#statusline()}
 let g:airline_powerline_fonts = 1 
 let g:airline#extensions#tabline#enabled=1
 
+" CtrlSF setup
+"-----------------------------------
+let g:ctrlsf_args_ignoredir = ['.fact', '.terraform']
+
 " Gundo setup
 " ----------------------------------
 nnoremap <F6> :GundoToggle<CR>
@@ -144,15 +147,6 @@ nnoremap <F6> :GundoToggle<CR>
 " ----------------------------------
 let g:vimwiki_list=[{'path':'~/.vim/vimwiki'}]
 
-" Vimux setup
-" ----------------------------------
-map <Leader>ps :call VimuxRunCommand("ipython;")<CR>
-map <Leader>vp :VimuxPromptCommand<CR>
-" Close vim tmux runner opened by VimuxRunCommand
-map <Leader>vq :VimuxCloseRunner<CR>
-" Interrupt any command running in the runner pane map
-map <Leader>vs :VimuxInterruptRunner<CR>
-
 " Obsession 
 " ----------------------------------
 set statusline+=%{ObsessionStatus()}
@@ -160,6 +154,11 @@ set statusline+=%{ObsessionStatus()}
 " Deoplete 
 " ----------------------------------
 let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_smart_case = 1
+let g:deoplete#auto_complete_start_length = 1
+
+let g:echodoc_enable_at_startup = 1
+
 " use tab to forward cycle
 inoremap <silent><expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 " use tab to backward cycle
@@ -167,11 +166,8 @@ inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 
 autocmd FileType python setlocal omnifunc=jedi#completions
 
-let g:echodoc_enable_at_startup = 1
-
 let g:deoplete#sources#jedi#show_docstring = 1
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-let g:deoplete#sources#go#gocode_binary = '$GOPATH/bin/gocode'
 
 " C and C++
 let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-3.8/lib/libclang.so'
@@ -180,6 +176,9 @@ let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-3.8/lib/clang/'
 " Terraform
 let g:deoplete#omni_patterns = {}
 let g:deoplete#omni_patterns.terraform = '[^ *\t"{=$]\w*'
+
+let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
+let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
 
 " NERDTree setup
 " ----------------------------------
@@ -209,7 +208,40 @@ augroup END
 let g:neomake_python_enabled_makers = ['flake8', 'pep8', 'pylama']
 let g:neomake_python_flake8_maker = { 'args': ['--ignore=E501, E702, F403'], }
 let g:neomake_python_pep8_maker = { 'args': ['--max-line-length=100', '--ignore=E115,E266'], }
-"let g:neomake_open_list = 2
+let g:neomake_terraform_terraform_validate_maker = {
+            \ 'exe' : 'terraform',
+            \ 'append_file': 0,
+            \ 'cwd': '%:p:h',
+            \ 'args': ['validate', '-no-color'],
+            \ 'errorformat': 'Error\ loading\ files\ Error\ parsing %f:\ At\ %l:%c:\ %m'
+            \ }
+
+let g:neomake_terraform_enabled_makers = ['terraform_validate', 'tflint', 'tffilter']
+let g:neomake_terraform_tffilter_maker = {
+            \ 'exe': 'tffilter',
+            \ 'append_file': 0,
+            \ 'cwd': '%:p:h',
+            \ 'args': ['%:p'],
+            \ 'errorformat': '%f:%l:%m'
+            \ }
+
+let g:neomake_terraform_tflint_maker = {
+            \ 'exe' : 'tflint',
+            \ 'append_file': 0,
+            \ 'cwd': '%:p:h',
+            \ 'args': [],
+            \ 'errorformat': '%+P%f,%p%t%*[^:]:%l %m,%-Q'
+            \ }
+
+let g:neomake_go_enabled_makers = [ 'go', 'golangcifast' ]
+let g:neomake_go_golangcifast_maker = {
+            \ 'exe': 'golangci-lint',
+            \ 'args': [ 'run', '--fast', ],
+            \ 'append_file': 0,
+            \ 'cwd': '%:h',
+            \ }
+
+let g:neomake_markdown_enabled_makers = [ 'markdownlint']
 
 function! LocationNext()
   try
@@ -333,10 +365,9 @@ imap <silent> <F8> <Plug>MarkdownPreview        " for insert mode
 nmap <silent> <F9> <Plug>StopMarkdownPreview    " for normal mode
 imap <silent> <F9> <Plug>StopMarkdownPreview    " for insert mode
 
-" vim-notes
+" traces.vim
 " ----------------------------------
-let g:notes_directories = ['~/OneDrive - Talend/Notes']
-
+set inccommand=""
 
 " General
 " ----------------------------------
@@ -485,7 +516,7 @@ command! PrettyXML call DoPrettyXML()set secure
 set tags=./tags
 
 " ctrlsf.vim search
-nmap <leader>f <Plug>CtrlSFPrompt
+nmap     <leader>f <Plug>CtrlSFPrompt
 vmap     <leader>f <Plug>CtrlSFVwordPath
 vmap     <leader>F <Plug>CtrlSFVwordExec
 nmap     <leader>n <Plug>CtrlSFCwordPath
@@ -527,7 +558,7 @@ vnoremap <leader>P "+P
 nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
 
 " reload config after editing vimrc
-autocmd! BufWritePost .vimrc source $MYVIMRC
+autocmd! BufWritePost .init.vim source $MYVIMRC
 
 " U is useless (except for Vi compatibility), make it a redo instead
 map U <C-r>
