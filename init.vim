@@ -141,13 +141,10 @@ let g:deoplete#enable_smart_case = 1
 let g:deoplete#auto_complete_start_length = 1
 
 " use tab to forward cycle
-inoremap <silent><expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 " use tab to backward cycle
-inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
+inoremap <silent><expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
-autocmd FileType python setlocal omnifunc=jedi#completions
-
-let g:deoplete#sources#jedi#show_docstring = 1
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
 " Terraform
@@ -186,8 +183,8 @@ let g:NERDTreeIndicatorMapCustom = {
 
 " UltiSnips {{{2
 " ----------------------------------
-"let g:UltiSnipsExpandTrigger       = "<C-j>" " TODO change it
-"let g:UltiSnipsJumpForwardTrigger  = "<C-l>" " TODO change it
+let g:UltiSnipsExpandTrigger       = "<C-n>" " TODO change it
+let g:UltiSnipsJumpForwardTrigger  = "<C-m>" " TODO change it
 "let g:UltiSnipsJumpBackwardTrigger = "<C-h>" " TODO change it
 "let g:UltiSnipsListSnippets        = "<C-k>" "List possible snippets based on current file
 
