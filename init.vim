@@ -7,31 +7,32 @@
 
 " VUNDLE CONFIGURATION {{{1
 "-----------------------------------
+
 filetype off
 
 exe 'set rtp+=' . $GOPATH . '/src/github.com/junegunn/fzf'
 
-" List of bundles (or extensions)
-"-----------------------------------
 "dein Scripts
 if &compatible
     set nocompatible               " Be iMproved
 endif
 
-set runtimepath+=$HOME/.config/nvim/bundles/repos/github.com/Shougo/dein.vim
-
 " PLUGIN LIST {{{1
-if dein#load_state("$HOME/.config/nvim/bundles")
-    call dein#begin("$HOME/.config/nvim/bundles")
+" Add the dein installation directory into runtimepath
+set runtimepath+=~/.cache/dein/repos/github.com/Shougo/dein.vim
+
+if dein#load_state('~/.cache/dein')
+    call dein#begin('~/.cache/dein')
 
     " Let dein manage dein
     " Required:
+    call dein#add('~/.cache/dein/repos/github.com/Shougo/dein.vim')
     call dein#add('Shougo/dein.vim') " Plugin manager on steroid
-    call dein#add('haya14busa/dein-command.vim') " Utility comands of dein.vim with rich completion.
+    call dein#add('haya14busa/dein-command.vim') " Utility commands of dein.vim with rich completion.
 
     " Add or remove your plugins here:
-    " COMMENT {{{2
-    call dein#add('preservim/nerdcommenter') " Vim plugin for intensely nerdy commenting powers 
+    " COMMENT Commented {{{2
+    "call dein#add('preservim/nerdcommenter') " Vim plugin for intensely nerdy commenting powers 
 
     " FILE FORMAT {{{2
     call dein#add('elzr/vim-json') " Distinct highlighting of keywords vs values, JSON-specific (non-JS) warnings, quote concealing.
@@ -50,7 +51,7 @@ if dein#load_state("$HOME/.config/nvim/bundles")
     " - pynvim
     " - msgpack
     call dein#add('Shougo/deoplete.nvim') " Dark powered asynchronous completion framework for neovim/Vim8 
-    call dein#add('zchee/deoplete-jedi')
+    " call dein#add('zchee/deoplete-jedi') " deoplete.nvim source for Python 
     call dein#add('fszymanski/deoplete-emoji') " Deoplete source for emoji codes 
     call dein#add('neomake/neomake') " Asynchronous linting and make framework for Neovim/Vim 
     call dein#add('Shougo/echodoc.vim') " Print documents in echo area (Neovim command line).
@@ -81,8 +82,7 @@ if dein#load_state("$HOME/.config/nvim/bundles")
     " GOLANG {{{2
     call dein#add('fatih/vim-go') " Go development plugin for Vim
     call dein#add('zchee/deoplete-go', {'build': 'make'}) " Asynchronous Go completion for Neovim. deoplete source for Go.
-    "call dein#add('nsf/gocode', {'rtp': 'nvim/'}) TODO check if commentary
-    "has changed go completion behavior
+    "call dein#add('nsf/gocode', {'rtp': 'nvim/'}) TODO check if commentary have an impact has changed go completion behavior
 
     " TERRAFORM {{{2
     call dein#add('hashivim/vim-terraform') " Basic vim/terraform integration
@@ -100,11 +100,11 @@ if dein#load_state("$HOME/.config/nvim/bundles")
     " SOURCE CODE {{{2
     call dein#add('ludovicchabant/vim-gutentags') " A Vim plugin that manages your tag files
 
-    " FOLDING {{{2
-    call dein#add('tmhedberg/SimpylFold') " No-BS Python code folding for Vim 
-    call dein#add('Konfekt/FastFold') " Speed up Vim by updating folds only when called-for. TODO study it
+    " FOLDING Commented {{{2
+    "call dein#add('tmhedberg/SimpylFold') " No-BS Python code folding for Vim 
+    "call dein#add('Konfekt/FastFold') " Speed up Vim by updating folds only when called-for. TODO study it
 
-    " PRODUCTIVITY {{{2 TODO congigure yarn
+    " PRODUCTIVITY {{{2 TODO configure yarn
     call dein#add('iamcco/markdown-preview.nvim', {'on_ft': ['markdown', 'pandoc.markdown', 'rmd'],
                 \ 'build': 'sh -c "cd app & yarn install"' }) " Markdown preview plugin for (neo)vim 
 
@@ -112,7 +112,7 @@ if dein#load_state("$HOME/.config/nvim/bundles")
     call dein#end()
     call dein#save_state()
 endif
-"
+
 " Required:
 filetype plugin indent on
 syntax enable
@@ -120,7 +120,9 @@ syntax enable
 "End dein Scripts-------------------------
 "}}}1
 
-" Airline setup
+" CONFIG PLUGIN {{{1
+
+" Airline setup {{{2
 "-----------------------------------
 set laststatus=2
 set statusline+=%{fugitive#statusline()}
@@ -128,35 +130,15 @@ set statusline+=%{virtualenv#statusline()}
 let g:airline_powerline_fonts = 1 
 let g:airline#extensions#tabline#enabled=1
 
-" CtrlSF setup
+" CtrlSF setup {{{2
 "-----------------------------------
 let g:ctrlsf_args_ignoredir = ['.fact', '.terraform']
 
-" Gundo setup
-" ----------------------------------
-nnoremap <F6> :GundoToggle<CR>
-
-" Vimwiki setup
-" ----------------------------------
-let g:vimwiki_list=[{'path':'~/.vim/vimwiki'}]
-
-" Obsession 
-" ----------------------------------
-set statusline+=%{ObsessionStatus()}
-
-" Deoplete 
+" Deoplete {{{2
 " ----------------------------------
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_smart_case = 1
 let g:deoplete#auto_complete_start_length = 1
-
-" Echodoc
-" ----------------------------------
-let g:echodoc_enable_at_startup = 1
-let g:echodoc#type = 'floating'
-" To use a custom highlight for the float window,
-" change Pmenu to your highlight group
-highlight link EchoDocFloat Pmenu
 
 " use tab to forward cycle
 inoremap <silent><expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
@@ -175,7 +157,15 @@ let g:deoplete#omni_patterns.terraform = '[^ *\t"{=$]\w*'
 let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
 let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
 
-" NERDTree setup
+" Echodoc {{{2
+" ----------------------------------
+let g:echodoc_enable_at_startup = 1
+let g:echodoc#type = 'floating'
+" To use a custom highlight for the float window,
+" change Pmenu to your highlight group
+highlight link EchoDocFloat Pmenu
+
+" NERDTree setup {{{2
 " ----------------------------------
 " Ignore files
 let NERDTreeIgnore = ['\.pyc$']
@@ -186,12 +176,27 @@ let NERDTreeShowBookmarks=1
 " Mirroring between tabs
 let NERDTreeMirror=0
 
-" Vim-go
+" NerdTree activation {{{2
+"----------------------------------
+map <F2> <ESC>:NERDTreeToggle<CR>
+
+let g:NERDTreeIndicatorMapCustom = {
+   \ "Modified"  : "◁",
+   \ }
+
+" UltiSnips {{{2
+" ----------------------------------
+"let g:UltiSnipsExpandTrigger       = "<C-j>" " TODO change it
+"let g:UltiSnipsJumpForwardTrigger  = "<C-l>" " TODO change it
+"let g:UltiSnipsJumpBackwardTrigger = "<C-h>" " TODO change it
+"let g:UltiSnipsListSnippets        = "<C-k>" "List possible snippets based on current file
+
+" Vim-go {{{2
 " ----------------------------------
 let g:go_def_mode='gopls' " TODO check if it's working
 let g:go_info_mode='gopls' " TODO check if it's working
 
-" Vim-indent-guides
+" Vim-indent-guides {{{2
 " ----------------------------------
 set ts=4 sw=4 et
 let g:indent_guides_start_level = 2
@@ -203,7 +208,7 @@ augroup IndentGuides
     autocmd VimEnter * IndentGuidesEnable
 augroup END
 
-" Neomake
+" Neomake {{{2
 " ----------------------------------
 let g:neomake_python_enabled_makers = ['flake8', 'pep8', 'pylama']
 let g:neomake_python_flake8_maker = { 'args': ['--ignore=E501, E702, F403'], }
@@ -268,7 +273,7 @@ nnoremap <leader><S-e> :call LocationPrevious()<cr>
 
 autocmd! BufWritePost * Neomake
 
-" Colorscheme
+" Colorscheme {{{2
 " ----------------------------------
 set timeout
 set timeoutlen=750
@@ -302,15 +307,15 @@ nnoremap <space> za
 " SimplyFold setup
 let g:SimpylFold_docstring_preview=1
 
-" Signify setup
+" Signify setup {{{2
 " ----------------------------------
 nmap <leader>gj <plug>(signify-next-hunk)
 nmap <leader>gk <plug>(signify-prev-hunk)
 
-" FZF
+" FZF {{{2
 " ----------------------------------
 
-" Theme selector
+" Theme selector {{{3
 nnoremap <silent> <Leader>C :call fzf#run({
 \   'source':
 \     map(split(globpath(&rtp, "colors/*.vim"), "\n"),
@@ -320,7 +325,7 @@ nnoremap <silent> <Leader>C :call fzf#run({
 \   'left':    30
 \ })<CR>
 
-" For MRU files
+" For MRU files {{{3
 function! s:all_files()
  return extend(
  \ filter(copy(v:oldfiles),
@@ -334,6 +339,7 @@ command! FZFMru call fzf#run({
 \ 'options': '-m -x +s',
 \ 'down':    '40%' })
 
+" Mapping {{{3
 nnoremap <silent> <c-p> :Files<CR>
 nnoremap <silent> <c-h> :FZFMru<CR> 
 nnoremap <silent> <leader>B :Buffers<CR>
@@ -348,138 +354,29 @@ nnoremap <silent> <leader>gl :Commits<CR>
 nnoremap <silent> <leader>ga :BCommits<CR>
 nnoremap <silent> <leader>ft :Filetypes<CR>
 
-" Mapping selecting mappings
+" Mapping selecting mappings {{{3
 nmap <leader><tab> <plug>(fzf-maps-n)
 xmap <leader><tab> <plug>(fzf-maps-x)
 omap <leader><tab> <plug>(fzf-maps-o)
 
-" Remove status line when fzf run
+" Remove status line when fzf run {{{3
 autocmd! FileType fzf
 autocmd  FileType fzf set laststatus=0 noshowmode noruler
  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
-" MarkdownPreview setup
+" MarkdownPreview setup {{{2
 " ----------------------------------
 nmap <silent> <F8> <Plug>MarkdownPreview        " for normal mode
 imap <silent> <F8> <Plug>MarkdownPreview        " for insert mode
 nmap <silent> <F9> <Plug>StopMarkdownPreview    " for normal mode
 imap <silent> <F9> <Plug>StopMarkdownPreview    " for insert mode
 
-" traces.vim
+" traces.vim {{{2
 " ----------------------------------
 set inccommand=""
 
-" General
+" ctrlsf.vim search {{{2
 " ----------------------------------
-let g:python_host_prog = '/usr/local/bin/python'
-let g:python3_host_prog = '/usr/local/bin/python3'
-
-syntax on
-
-" Ignore case when searching
-set ignorecase
-
-" When searching try to be smart about cases 
-set smartcase
-
-"" Buffers - explore/next/previous: Alt-F12, F12, Shift-F12.
-nnoremap <silent> <M-F12> :BufExplorer<CR>
-nnoremap <silent> <F12> :bn<CR>
-nnoremap <silent> <S-F12> :bp<CR>
-
-" Put plugins and dictionaries in this dir (also on Windows)
-let vimDir = '$HOME/.config/nvim'
-let &runtimepath.=','.vimDir
-
-" Keep undo history across sessions by storing it in a file
-if has('persistent_undo')
-   let myUndoDir = expand(vimDir . '/undodir')
-   " Create dirs
-   call system('mkdir ' . vimDir)
-   call system('mkdir ' . myUndoDir)
-   let &undodir = myUndoDir
-   set undofile
-endif
-
-" Keep undofile
-set undodir=~/.vim/undodir
-set undofile
-set undolevels=1000 "maximum number of changes that can be undone
-set undoreload=10000 "maximum number lines to save for undo on a buffer reload
-
-" NerdTree activation
-"----------------------------------
-map <F2> <ESC>:NERDTreeToggle<CR>
-
-let g:NERDTreeIndicatorMapCustom = {
-   \ "Modified"  : "◁",
-   \ }
-
-
-" UltiSnips
-"" ----------------------------------
-"let g:UltiSnipsExpandTrigger       = "<C-j>" " TODO change it
-"let g:UltiSnipsJumpForwardTrigger  = "<C-l>" " TODO change it
-"let g:UltiSnipsJumpBackwardTrigger = "<C-h>" " TODO change it
-"let g:UltiSnipsListSnippets        = "<C-k>" "List possible snippets based on current file
-
-" Affichage des numeros de ligne
-set number
-"highlight LineNr ctermbg=darkblue ctermfg=gray
-
-" Affiche une aide pour 80 caracteres
-set cc=80
-
-" Definition de l'affichage des caracteres invisbles avec 'set list'
-" set listchars=nbsp:
-
-" Affichage surbrillance recherche
-set hlsearch
-set smartcase
-
-" Makes search act like search in modern browsers
-set incsearch 
-
-" Don't redraw while executing macros (good performance config)
-set lazyredraw 
-
-" For regular expressions turn magic on
-set magic
-
-" Treat long lines as break lines (useful when moving around in them)
-map j gj
-map k gk
-
-" Indentation respectant le format de developpement
-set cindent
-set tabstop=4
-set shiftwidth=4
-set expandtab
-
-" Syntax pour python
-let python_highlight_all = 1
-
-" Indentation pour python
-autocmd FileType python set sw=4
-autocmd FileType python set ts=4
-autocmd FileType python set sts=4
-
-" Indentation pour yaml
-autocmd FileType yaml setlocal ts=2 
-autocmd FileType yaml setlocal sts=2
-autocmd FileType yaml setlocal sw=2
-
-" Permet d'utiliser des .vimrc par projets et eviter les commandes dangereuses
-set exrc
-set secure
-
-" format JSON
-command! FormatJSON %!python -m json.tool
-
-" Tags
-set tags=./tags
-
-" ctrlsf.vim search
 nmap     <leader>f <Plug>CtrlSFPrompt
 vmap     <leader>f <Plug>CtrlSFVwordPath
 vmap     <leader>F <Plug>CtrlSFVwordExec
@@ -489,20 +386,106 @@ nnoremap <leader>o :CtrlSFOpen<CR>
 nnoremap <leader>t :CtrlSFToggle<CR>
 inoremap <leader>t <Esc>:CtrlSFToggle<CR>
 
-" Redraw fix
+" GENERAL {{{1
+" ----------------------------------
+
+" Neovim config {{{2
+let g:python_host_prog = '/usr/local/bin/python'
+let g:python3_host_prog = '/usr/local/bin/python3'
+
+" Ignore case when searching {{{2
+set ignorecase
+
+" When searching try to be smart about cases {{{2
+set smartcase
+
+"" Buffers - explore/next/previous: Alt-F12, F12, Shift-F12. {{{2
+nnoremap <silent> <M-F12> :BufExplorer<CR>
+nnoremap <silent> <F12> :bn<CR>
+nnoremap <silent> <S-F12> :bp<CR>
+
+" Put plugins and dictionaries in this dir (also on Windows) {{{2 TODO refacto
+" to use it in other function
+let vimDir = '$HOME/.config/nvim'
+let &runtimepath.=','.vimDir
+
+" Keep undo history across sessions by storing it in a file {{{2
+if has('persistent_undo')
+   let myUndoDir = expand(vimDir . '/undodir')
+   " Create dirs
+   call system('mkdir ' . vimDir)
+   call system('mkdir ' . myUndoDir)
+   let &undodir = myUndoDir
+   set undofile
+endif
+
+" Keep undofile {{{2
+set undodir=~/.vim/undodir
+set undofile
+set undolevels=1000 "maximum number of changes that can be undone
+set undoreload=10000 "maximum number lines to save for undo on a buffer reload
+
+" Line number {{{2
+set number
+"highlight LineNr ctermbg=darkblue ctermfg=gray
+
+" 80 character limit indicator {{{2
+set cc=80
+
+" Definition de l'affichage des caracteres invisbles avec 'set list' {{{2
+" set listchars=nbsp:
+
+" Higlight search {{{2
+set hlsearch
+set smartcase
+
+" Makes search act like search in modern browsers {{{2
+set incsearch 
+
+" Don't redraw while executing macros (good performance config) {{{2
+set lazyredraw 
+
+" For regular expressions turn magic on {{{2
+set magic
+
+" Treat long lines as break lines (useful when moving around in them) {{{2
+map j gj
+map k gk
+
+" Default indent {{{2
+set cindent
+set tabstop=4
+set shiftwidth=4
+set expandtab
+
+" Python syntax {{{2
+let python_highlight_all = 1
+
+" Python indent TODO migrate in specific file {{{2
+autocmd FileType python set sw=4
+autocmd FileType python set ts=4
+autocmd FileType python set sts=4
+
+" Yaml indent TODO migrate in specific file {{{2
+autocmd FileType yaml setlocal ts=2 
+autocmd FileType yaml setlocal sts=2
+autocmd FileType yaml setlocal sw=2
+
+" format JSON {{{2
+command! FormatJSON %!python -m json.tool
+
+" Tags {{{2
+set tags=./tags
+
+" Redraw fix {{{2
 imap <silent> <c-l> <c-o>:redraw!<CR>
 
-" Coloris en rouge les fins de ligne
+" Red EOL {{{2
 autocmd InsertEnter * syn clear EOLWS | syn match EOLWS excludenl /\s\+\%#\@!$/
 autocmd InsertLeave * syn clear EOLWS | syn match EOLWS excludenl /\s\+$/
 highlight EOLWS ctermbg=red guibg=red
 
-" Break bad habits!!
-noremap <Up> <NOP>
-noremap <Down> <NOP>
-noremap <Left> <NOP>
-noremap <Right> <NOP>
-
+" Copy/Paste clipboard {{{2
 " Copy to clipboard
 vnoremap  <leader>y  "+y
 nnoremap  <leader>Y  "+yg_
@@ -515,19 +498,26 @@ nnoremap <leader>P "+P
 vnoremap <leader>p "+p
 vnoremap <leader>P "+P
 
+" Mappings {{{2
+" Break bad habits!!
+noremap <Up> <NOP>
+noremap <Down> <NOP>
+noremap <Left> <NOP>
+noremap <Right> <NOP>
+
 " Smart way to move between windows
 map <C-j> <C-W>j
 map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
 
-" Activate autoreload
+" Activate autoreload {{{2
 "set autoread
 
-" Mute highlighting
+" Mute highlighting {{{2
 nnoremap <silent> <leader>l :<C-u>nohlsearch<CR><C-l>
 
-" reload config after editing vimrc
+" reload config after editing vimrc {{{2
 autocmd! BufWritePost .init.vim source $MYVIMRC
 
 " U is useless (except for Vi compatibility), make it a redo instead
@@ -541,16 +531,14 @@ nnoremap K i<CR><Esc>k$
 " command! W w !sudo tee "%" > /dev/null
 command! W w !sudo dd of=%
 
-" Mouse activation
+" Mouse activation {{{2
 set mouse=a
 
-set wildignore+=*.pyc,tags,*.swp " DOCME
+" Ignore files for searching {{{2
+set wildignore+=*.pyc,tags,*.swp 
 
-" Used for cmdheight
+" Used for cmdheight {{{2
 set noshowmode
 
-" Spell-check set to <leader>o, 'o' for 'orthography'
+" Spell-check set to <leader>o, 'o' for 'orthography' {{{2
 map <leader>o :setlocal spell! spelllang=en_us<CR>
-
-" TODO DOC ME
-"filetype plugin on
