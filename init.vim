@@ -1,7 +1,11 @@
-" Vimrc configuration file
-" Version : 2019-11
+"   _  __             _                                  ____ __   
+"  / |/ /__ ___ _  __(_)_ _    __ _  ___ ___ ___ __ __  / _(_) /__ 
+" /    / -_) _ \ |/ / /  ' \  /  ' \/ -_|_-<(_-</ // / / _/ / / -_)
+"/_/|_/\__/\___/___/_/_/_/_/ /_/_/_/\__/___/___/\_, / /_//_/_/\__/ 
+"                                              /___/               
+" Version : 2020-04
 
-" Vundle configuration
+" VUNDLE CONFIGURATION {{{1
 "-----------------------------------
 filetype off
 
@@ -11,121 +15,110 @@ exe 'set rtp+=' . $GOPATH . '/src/github.com/junegunn/fzf'
 "-----------------------------------
 "dein Scripts
 if &compatible
-  set nocompatible               " Be iMproved
+    set nocompatible               " Be iMproved
 endif
 
-" Required:
 set runtimepath+=$HOME/.config/nvim/bundles/repos/github.com/Shougo/dein.vim
 
-" Required:
+" PLUGIN LIST {{{1
 if dein#load_state("$HOME/.config/nvim/bundles")
     call dein#begin("$HOME/.config/nvim/bundles")
 
     " Let dein manage dein
     " Required:
-    call dein#add('Shougo/dein.vim')
-    call dein#add('haya14busa/dein-command.vim')
+    call dein#add('Shougo/dein.vim') " Plugin manager on steroid
+    call dein#add('haya14busa/dein-command.vim') " Utility comands of dein.vim with rich completion.
 
     " Add or remove your plugins here:
-    call dein#add('scrooloose/nerdcommenter')
-    call dein#add('evidens/vim-twig')
-    call dein#add('tpope/vim-obsession')
-    call dein#add('junegunn/vader.vim')
+    " COMMENT {{{2
+    call dein#add('preservim/nerdcommenter') " Vim plugin for intensely nerdy commenting powers 
 
-    " ====== FILE FORMAT ======
-    call dein#add('chrisbra/csv.vim')
-    call dein#add('elzr/vim-json')
+    " FILE FORMAT {{{2
+    call dein#add('elzr/vim-json') " Distinct highlighting of keywords vs values, JSON-specific (non-JS) warnings, quote concealing.
 
-    " ====== SNIPPET ======
-    call dein#add('SirVer/ultisnips')
-    call dein#add('honza/vim-snippets')
+    " SNIPPET {{{2
+    call dein#add('SirVer/ultisnips') " UltiSnips is the ultimate solution for snippets in Vim
 
-    " ====== SEARCH && REPLACE ======
-    call dein#add('dyng/ctrlsf.vim')
-    call dein#add('tpope/vim-abolish')
-    call dein#add('tpope/vim-surround')
-    call dein#add('markonm/traces.vim')
+    " SEARCH && REPLACE {{{2
+    call dein#add('dyng/ctrlsf.vim') " An ack/ag/pt/rg powered code search and view tool
+    call dein#add('tpope/vim-abolish') " Easily search for, substitute, and abbreviate multiple variants of a word
+    call dein#add('tpope/vim-surround') " Quoting/parenthesizing made simple 
+    call dein#add('markonm/traces.vim') " Range, pattern and substitute preview for Vim 
 
-    " ====== COMPILATION - LITING ======
-    call dein#add('neomake/neomake')
-    call dein#add('Shougo/deoplete.nvim')
-    call dein#add('Shougo/echodoc.vim')
-    call dein#add('Shougo/neoinclude.vim')
-
-    " ====== GIT ======
-    call dein#add('tpope/vim-fugitive')
-    call dein#add('sjl/gundo.vim')
-    call dein#add('mhinz/vim-signify')
-    call dein#add('tpope/vim-rhubarb')
-    call dein#add('fszymanski/deoplete-emoji')
-
-    " ====== INTERFACE ======
-    call dein#add('junegunn/fzf', { 'build': './install --all', 'merged': 0 })
-    call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
-    call dein#add('nathanaelkane/vim-indent-guides')
-    call dein#add('bling/vim-airline')
-    call dein#add('Xuyuanp/nerdtree-git-plugin')
-    call dein#add('scrooloose/nerdtree')
-    call dein#add('ryanoasis/vim-devicons')
-
-    " ====== MAPPINGS ======
-    call dein#add('tpope/vim-unimpaired')
-
-    " ====== PYTHON ======
+    " COMPILATION - LITING {{{2
+    " Deoplete has python libraries requirements/dependencies
+    " - pynvim
+    " - msgpack
+    call dein#add('Shougo/deoplete.nvim') " Dark powered asynchronous completion framework for neovim/Vim8 
     call dein#add('zchee/deoplete-jedi')
-    call dein#add('vim-scripts/indentpython.vim')
-    call dein#add('jmcantrell/vim-virtualenv')
-    call dein#add('hdima/python-syntax')
+    call dein#add('fszymanski/deoplete-emoji') " Deoplete source for emoji codes 
+    call dein#add('neomake/neomake') " Asynchronous linting and make framework for Neovim/Vim 
+    call dein#add('Shougo/echodoc.vim') " Print documents in echo area (Neovim command line).
+    "call dein#add('Shougo/neoinclude.vim') " Include completion framework for neocomplete/deoplete 
 
-    " ====== GOLANG ======
-    call dein#add('fatih/vim-go')
-    call dein#add('zchee/deoplete-go', {'build': 'make'})
-    call dein#add('nsf/gocode', {'rtp': 'nvim/'})
+    " GIT {{{2
+    call dein#add('tpope/vim-fugitive') " A Git wrapper so awesome, it should be illegal
+    call dein#add('tpope/vim-rhubarb') " GitHub extension for fugitive.vim
+    call dein#add('mhinz/vim-signify') " ➕ Show a diff using Vim its sign column.
 
-    " ====== C/C++ =======
-    call dein#add('zchee/deoplete-clang')
+    " INTERFACE {{{2
+    call dein#add('junegunn/fzf', { 'build': './install --all', 'merged': 0 }) " A command-line fuzzy finder 
+    call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' }) " fzf ❤️  vim 
+    call dein#add('nathanaelkane/vim-indent-guides') " A Vim plugin for visually displaying indent levels in code 
+    call dein#add('bling/vim-airline') " Lean & mean status/tabline for vim that's light as air 
+    call dein#add('ryanoasis/vim-devicons') " Adds file type icons to Vim plugins such as: NERDTree, vim-airline, CtrlP, unite, Denite, lightline, vim-startify and many more 
+    call dein#add('preservim/nerdtree') " A tree explorer plugin for vim. 
+    call dein#add('Xuyuanp/nerdtree-git-plugin') " A plugin of NERDTree showing git status 
 
-    " ====== TERRAFORM ======
-    call dein#add('hashivim/vim-terraform')
-    call dein#add('juliosueiras/vim-terraform-completion')
+    " MAPPINGS {{{2
+    call dein#add('tpope/vim-unimpaired') " Pairs of handy bracket mappings
 
-    " ====== ANSIBLE ======
-    call dein#add('pearofducks/ansible-vim')
-    call dein#add('arouene/vim-ansible-vault')
+    " PYTHON {{{2
+    call dein#add('vim-scripts/indentpython.vim') " An alternative indentation script for python
+    call dein#add('jmcantrell/vim-virtualenv') " Vim plugin for working with python virtualenvs
+    call dein#add('hdima/python-syntax') " Python syntax highlighting for Vim
 
-    " ====== MUSTACHE ======
-    call dein#add('mustache/vim-mustache-handlebars')
+    " GOLANG {{{2
+    call dein#add('fatih/vim-go') " Go development plugin for Vim
+    call dein#add('zchee/deoplete-go', {'build': 'make'}) " Asynchronous Go completion for Neovim. deoplete source for Go.
+    "call dein#add('nsf/gocode', {'rtp': 'nvim/'}) TODO check if commentary
+    "has changed go completion behavior
 
-    " ====== THEME ======
-    call dein#add('joshdick/onedark.vim')
-    call dein#add('freeo/vim-kalisi')
-    call dein#add('morhetz/gruvbox')
+    " TERRAFORM {{{2
+    call dein#add('hashivim/vim-terraform') " Basic vim/terraform integration
+    call dein#add('juliosueiras/vim-terraform-completion') " A (Neo)Vim Autocompletion and linter for Terraform, a HashiCorp tool
 
-    " ====== SOURCE CODE ======
-    call dein#add('ludovicchabant/vim-gutentags')
+    " ANSIBLE {{{2
+    call dein#add('pearofducks/ansible-vim') " A vim plugin for syntax highlighting Ansible's common filetypes 
+    call dein#add('arouene/vim-ansible-vault') " Vault and Unvault inline values of Yaml files
 
-    " ====== FOLDING ======
-    call dein#add('tmhedberg/SimpylFold')
-    call dein#add('Konfekt/FastFold')
+    " THEME {{{2
+    call dein#add('joshdick/onedark.vim') " A dark Vim/Neovim color scheme inspired by Atom's One Dark syntax theme.
+    call dein#add('freeo/vim-kalisi') " The colorscheme with neovim in mind 
+    call dein#add('morhetz/gruvbox') " Retro groove color scheme for Vim 
 
-    " ====== PRODUCTIVITY ======
-    call dein#add('iamcco/markdown-preview.vim')
+    " SOURCE CODE {{{2
+    call dein#add('ludovicchabant/vim-gutentags') " A Vim plugin that manages your tag files
 
-    " ====== FUN =====
-    call dein#add('rbtnn/mario.vim')
+    " FOLDING {{{2
+    call dein#add('tmhedberg/SimpylFold') " No-BS Python code folding for Vim 
+    call dein#add('Konfekt/FastFold') " Speed up Vim by updating folds only when called-for. TODO study it
 
-    " You can specify revision/branch/tag.
+    " PRODUCTIVITY {{{2 TODO congigure yarn
+    call dein#add('iamcco/markdown-preview.nvim', {'on_ft': ['markdown', 'pandoc.markdown', 'rmd'],
+                \ 'build': 'sh -c "cd app & yarn install"' }) " Markdown preview plugin for (neo)vim 
 
     " Required:
     call dein#end()
     call dein#save_state()
 endif
-
+"
 " Required:
 filetype plugin indent on
 syntax enable
 
 "End dein Scripts-------------------------
+"}}}1
 
 " Airline setup
 "-----------------------------------
@@ -157,7 +150,13 @@ let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_smart_case = 1
 let g:deoplete#auto_complete_start_length = 1
 
+" Echodoc
+" ----------------------------------
 let g:echodoc_enable_at_startup = 1
+let g:echodoc#type = 'floating'
+" To use a custom highlight for the float window,
+" change Pmenu to your highlight group
+highlight link EchoDocFloat Pmenu
 
 " use tab to forward cycle
 inoremap <silent><expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
@@ -168,10 +167,6 @@ autocmd FileType python setlocal omnifunc=jedi#completions
 
 let g:deoplete#sources#jedi#show_docstring = 1
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-
-" C and C++
-let g:deoplete#sources#clang#libclang_path = '/usr/lib/llvm-3.8/lib/libclang.so'
-let g:deoplete#sources#clang#clang_header = '/usr/lib/llvm-3.8/lib/clang/'
 
 " Terraform
 let g:deoplete#omni_patterns = {}
@@ -190,6 +185,11 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 let NERDTreeShowBookmarks=1
 " Mirroring between tabs
 let NERDTreeMirror=0
+
+" Vim-go
+" ----------------------------------
+let g:go_def_mode='gopls' " TODO check if it's working
+let g:go_info_mode='gopls' " TODO check if it's working
 
 " Vim-indent-guides
 " ----------------------------------
@@ -244,19 +244,19 @@ let g:neomake_go_golangcifast_maker = {
 let g:neomake_markdown_enabled_makers = [ 'markdownlint']
 
 function! LocationNext()
-  try
-    lnext
-  catch
-    try | lfirst | catch | endtry
-  endtry
+    try
+        lnext
+    catch
+        try | lfirst | catch | endtry
+    endtry
 endfunction
 
 function! LocationPrevious()                                                                  
-  try
-    lprev
-  catch
-    try | lfirst | catch | endtry
-  endtry
+    try
+        lprev
+    catch
+        try | lfirst | catch | endtry
+    endtry
 endfunction
 
 nnoremap <leader>e :call LocationNext()<cr>
@@ -287,12 +287,12 @@ let g:gruvbox_termcolors=256
 "let g:solarized_termcolors=256
 
 if has('nvim')
-  set t_ut=
-  set t_ZH=�[3m
-  set t_ZR=�[23m
+ set t_ut=
+ set t_ZH=�[3m
+ set t_ZR=�[23m
 
-  set ttimeout
-  set ttimeoutlen=0
+ set ttimeout
+ set ttimeoutlen=0
 
 endif
 
@@ -322,10 +322,10 @@ nnoremap <silent> <Leader>C :call fzf#run({
 
 " For MRU files
 function! s:all_files()
-  return extend(
-  \ filter(copy(v:oldfiles),
-  \        "v:val !~ 'fugitive:\\|NERD_tree\\|^/tmp/\\|.git/'"),
-  \ map(filter(range(1, bufnr('$')), 'buflisted(v:val)'), 'bufname(v:val)'))
+ return extend(
+ \ filter(copy(v:oldfiles),
+ \        "v:val !~ 'fugitive:\\|NERD_tree\\|^/tmp/\\|.git/'"),
+ \ map(filter(range(1, bufnr('$')), 'buflisted(v:val)'), 'bufname(v:val)'))
 endfunction
 
 command! FZFMru call fzf#run({
@@ -356,7 +356,7 @@ omap <leader><tab> <plug>(fzf-maps-o)
 " Remove status line when fzf run
 autocmd! FileType fzf
 autocmd  FileType fzf set laststatus=0 noshowmode noruler
-  \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+ \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
 " MarkdownPreview setup
 " ----------------------------------
@@ -375,6 +375,7 @@ let g:python_host_prog = '/usr/local/bin/python'
 let g:python3_host_prog = '/usr/local/bin/python3'
 
 syntax on
+
 " Ignore case when searching
 set ignorecase
 
@@ -392,12 +393,12 @@ let &runtimepath.=','.vimDir
 
 " Keep undo history across sessions by storing it in a file
 if has('persistent_undo')
-    let myUndoDir = expand(vimDir . '/undodir')
-    " Create dirs
-    call system('mkdir ' . vimDir)
-    call system('mkdir ' . myUndoDir)
-    let &undodir = myUndoDir
-    set undofile
+   let myUndoDir = expand(vimDir . '/undodir')
+   " Create dirs
+   call system('mkdir ' . vimDir)
+   call system('mkdir ' . myUndoDir)
+   let &undodir = myUndoDir
+   set undofile
 endif
 
 " Keep undofile
@@ -411,19 +412,16 @@ set undoreload=10000 "maximum number lines to save for undo on a buffer reload
 map <F2> <ESC>:NERDTreeToggle<CR>
 
 let g:NERDTreeIndicatorMapCustom = {
-    \ "Modified"  : "◁",
-    \ }
+   \ "Modified"  : "◁",
+   \ }
 
 
 " UltiSnips
-" ----------------------------------
-let g:UltiSnipsExpandTrigger       = "<C-j>"
-let g:UltiSnipsJumpForwardTrigger  = "<C-l>"
-let g:UltiSnipsJumpBackwardTrigger = "<C-h>"
-let g:UltiSnipsListSnippets        = "<C-k>" "List possible snippets based on current file
-
-" Folding/Unfolding
-map <2-LeftMouse> za
+"" ----------------------------------
+"let g:UltiSnipsExpandTrigger       = "<C-j>" " TODO change it
+"let g:UltiSnipsJumpForwardTrigger  = "<C-l>" " TODO change it
+"let g:UltiSnipsJumpBackwardTrigger = "<C-h>" " TODO change it
+"let g:UltiSnipsListSnippets        = "<C-k>" "List possible snippets based on current file
 
 " Affichage des numeros de ligne
 set number
@@ -478,40 +476,6 @@ set secure
 " format JSON
 command! FormatJSON %!python -m json.tool
 
-" Xml auto indent command 'gg=G'
-au FileType xml setlocal equalprg=xmllint\ --format\ --recover\ -\ 2>/dev/null
-
-" function
-function! DoPrettyXML()
-  " save the filetype so we can restore it later
-  let l:origft = &ft
-  set ft=
-  " delete the xml header if it exists. This will
-  " permit us to surround the document with fake tags
-  " without creating invalid xml.
-  1s/<?xml .*?>//e
-  " insert fake tags around the entire document.
-  " This will permit us to pretty-format excerpts of
-  " XML that may contain multiple top-level elements.
-  0put ='<PrettyXML>'
-  $put ='</PrettyXML>'
-  silent %!xmllint --format -
-  " xmllint will insert an <?xml?> header. it's easy enough to delete
-  " if you don't want it.
-  " delete the fake tags
-  2d
-  $d
-  " restore the 'normal' indentation, which is one extra level
-  " too deep due to the extra tags we wrapped around the document.
-  silent %<
-  " back to home
-  1
-  " restore the filetype
-  exe "set ft=" . l:origft
-endfunction
-
-command! PrettyXML call DoPrettyXML()set secure
-
 " Tags
 set tags=./tags
 
@@ -551,11 +515,17 @@ nnoremap <leader>P "+P
 vnoremap <leader>p "+p
 vnoremap <leader>P "+P
 
+" Smart way to move between windows
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
+
 " Activate autoreload
 "set autoread
 
 " Mute highlighting
-nnoremap <silent> <C-l> :<C-u>nohlsearch<CR><C-l>
+nnoremap <silent> <leader>l :<C-u>nohlsearch<CR><C-l>
 
 " reload config after editing vimrc
 autocmd! BufWritePost .init.vim source $MYVIMRC
@@ -574,7 +544,13 @@ command! W w !sudo dd of=%
 " Mouse activation
 set mouse=a
 
-set wildignore+=*.pyc,tags,*.swp
+set wildignore+=*.pyc,tags,*.swp " DOCME
 
 " Used for cmdheight
 set noshowmode
+
+" Spell-check set to <leader>o, 'o' for 'orthography'
+map <leader>o :setlocal spell! spelllang=en_us<CR>
+
+" TODO DOC ME
+"filetype plugin on
