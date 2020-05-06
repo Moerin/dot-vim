@@ -3,7 +3,7 @@
 " /    / -_) _ \ |/ / /  ' \  /  ' \/ -_|_-<(_-</ // / / _/ / / -_)
 "/_/|_/\__/\___/___/_/_/_/_/ /_/_/_/\__/___/___/\_, / /_//_/_/\__/ 
 "                                              /___/               
-" Version : 2020-04
+" Version : 2020-05
 
 " VUNDLE CONFIGURATION {{{1
 "-----------------------------------
@@ -32,7 +32,7 @@ if dein#load_state('~/.cache/dein')
 
     " Add or remove your plugins here:
     " COMMENT Commented {{{2
-    "call dein#add('preservim/nerdcommenter') " Vim plugin for intensely nerdy commenting powers 
+    call dein#add('preservim/nerdcommenter') " Vim plugin for intensely nerdy commenting powers 
 
     " FILE FORMAT {{{2
     call dein#add('elzr/vim-json') " Distinct highlighting of keywords vs values, JSON-specific (non-JS) warnings, quote concealing.
@@ -47,15 +47,8 @@ if dein#load_state('~/.cache/dein')
     call dein#add('markonm/traces.vim') " Range, pattern and substitute preview for Vim 
 
     " COMPILATION - LITING {{{2
-    " Deoplete has python libraries requirements/dependencies
-    " - pynvim
-    " - msgpack
-    call dein#add('Shougo/deoplete.nvim') " Dark powered asynchronous completion framework for neovim/Vim8 
-    " call dein#add('zchee/deoplete-jedi') " deoplete.nvim source for Python 
-    call dein#add('fszymanski/deoplete-emoji') " Deoplete source for emoji codes 
+    call dein#add('neoclide/coc.nvim', {'branch': 'release'}) " Intellisense engine for Vim8 & Neovim, full language server protocol support as VSCode 
     call dein#add('neomake/neomake') " Asynchronous linting and make framework for Neovim/Vim 
-    call dein#add('Shougo/echodoc.vim') " Print documents in echo area (Neovim command line).
-    "call dein#add('Shougo/neoinclude.vim') " Include completion framework for neocomplete/deoplete 
 
     " GIT {{{2
     call dein#add('tpope/vim-fugitive') " A Git wrapper so awesome, it should be illegal
@@ -81,12 +74,10 @@ if dein#load_state('~/.cache/dein')
 
     " GOLANG {{{2
     call dein#add('fatih/vim-go') " Go development plugin for Vim
-    call dein#add('zchee/deoplete-go', {'build': 'make'}) " Asynchronous Go completion for Neovim. deoplete source for Go.
-    "call dein#add('nsf/gocode', {'rtp': 'nvim/'}) TODO check if commentary have an impact has changed go completion behavior
 
     " TERRAFORM {{{2
-    call dein#add('hashivim/vim-terraform') " Basic vim/terraform integration
-    call dein#add('juliosueiras/vim-terraform-completion') " A (Neo)Vim Autocompletion and linter for Terraform, a HashiCorp tool
+    call dein#add('hashivim/vim-terraform') " Basic vim/terraform integration (Higlight)
+    "call dein#add('juliosueiras/vim-terraform-completion') " A (Neo)Vim Autocompletion and linter for Terraform, a HashiCorp tool
 
     " ANSIBLE {{{2
     call dein#add('pearofducks/ansible-vim') " A vim plugin for syntax highlighting Ansible's common filetypes 
@@ -101,8 +92,7 @@ if dein#load_state('~/.cache/dein')
     call dein#add('ludovicchabant/vim-gutentags') " A Vim plugin that manages your tag files
 
     " FOLDING Commented {{{2
-    "call dein#add('tmhedberg/SimpylFold') " No-BS Python code folding for Vim 
-    "call dein#add('Konfekt/FastFold') " Speed up Vim by updating folds only when called-for. TODO study it
+    call dein#add('Konfekt/FastFold') " Speed up Vim by updating folds only when called-for. TODO study it
 
     " PRODUCTIVITY {{{2 TODO configure yarn
     call dein#add('iamcco/markdown-preview.nvim', {'on_ft': ['markdown', 'pandoc.markdown', 'rmd'],
@@ -134,33 +124,21 @@ let g:airline#extensions#tabline#enabled=1
 "-----------------------------------
 let g:ctrlsf_args_ignoredir = ['.fact', '.terraform']
 
-" Deoplete {{{2
+" COC {{{2
 " ----------------------------------
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_smart_case = 1
-let g:deoplete#auto_complete_start_length = 1
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-" use tab to forward cycle
-inoremap <silent><expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-" use tab to backward cycle
-inoremap <silent><expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-
-autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
-
-" Terraform
-let g:deoplete#omni_patterns = {}
-let g:deoplete#omni_patterns.terraform = '[^ *\t"{=$]\w*'
-
-let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
-let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
-
-" Echodoc {{{2
-" ----------------------------------
-let g:echodoc_enable_at_startup = 1
-let g:echodoc#type = 'floating'
-" To use a custom highlight for the float window,
-" change Pmenu to your highlight group
-highlight link EchoDocFloat Pmenu
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
 " NERDTree setup {{{2
 " ----------------------------------
@@ -210,30 +188,6 @@ augroup END
 let g:neomake_python_enabled_makers = ['flake8', 'pep8', 'pylama']
 let g:neomake_python_flake8_maker = { 'args': ['--ignore=E501, E702, F403'], }
 let g:neomake_python_pep8_maker = { 'args': ['--max-line-length=100', '--ignore=E115,E266'], }
-let g:neomake_terraform_terraform_validate_maker = {
-            \ 'exe' : 'terraform',
-            \ 'append_file': 0,
-            \ 'cwd': '%:p:h',
-            \ 'args': ['validate', '-no-color'],
-            \ 'errorformat': 'Error\ loading\ files\ Error\ parsing %f:\ At\ %l:%c:\ %m'
-            \ }
-
-let g:neomake_terraform_enabled_makers = ['terraform_validate', 'tflint', 'tffilter']
-let g:neomake_terraform_tffilter_maker = {
-            \ 'exe': 'tffilter',
-            \ 'append_file': 0,
-            \ 'cwd': '%:p:h',
-            \ 'args': ['%:p'],
-            \ 'errorformat': '%f:%l:%m'
-            \ }
-
-let g:neomake_terraform_tflint_maker = {
-            \ 'exe' : 'tflint',
-            \ 'append_file': 0,
-            \ 'cwd': '%:p:h',
-            \ 'args': [],
-            \ 'errorformat': '%+P%f,%p%t%*[^:]:%l %m,%-Q'
-            \ }
 
 let g:neomake_go_enabled_makers = [ 'go', 'golangcifast' ]
 let g:neomake_go_golangcifast_maker = {
@@ -243,8 +197,7 @@ let g:neomake_go_golangcifast_maker = {
             \ 'cwd': '%:h',
             \ }
 
-let g:neomake_markdown_enabled_makers = [ 'markdownlint']
-
+" TODO check if this is useful
 function! LocationNext()
     try
         lnext
@@ -298,11 +251,11 @@ if has('nvim')
 
 endif
 
+" Folding {{{2
+" ----------------------------------
+
 " Enable folding with the spacebar
 nnoremap <space> za
-
-" SimplyFold setup
-let g:SimpylFold_docstring_preview=1
 
 " Signify setup {{{2
 " ----------------------------------
@@ -455,22 +408,6 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 
-" Python syntax {{{2
-let python_highlight_all = 1
-
-" Python indent TODO migrate in specific file {{{2
-autocmd FileType python set sw=4
-autocmd FileType python set ts=4
-autocmd FileType python set sts=4
-
-" Yaml indent TODO migrate in specific file {{{2
-autocmd FileType yaml setlocal ts=2 
-autocmd FileType yaml setlocal sts=2
-autocmd FileType yaml setlocal sw=2
-
-" format JSON {{{2
-command! FormatJSON %!python -m json.tool
-
 " Tags {{{2
 set tags=./tags
 
@@ -520,7 +457,7 @@ autocmd! BufWritePost .init.vim source $MYVIMRC
 " U is useless (except for Vi compatibility), make it a redo instead
 map U <C-r>
 " make K more consistent with J (J = join, K = split)
-nnoremap K i<CR><Esc>k$
+" nnoremap K i<CR><Esc>k$
 " Alternative: use a real 'Man' on K
 " runtime ftplugin/man.vim
 " nnoremap K :Man <C-r><C-w><CR>
