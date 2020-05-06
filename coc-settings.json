@@ -1,0 +1,9 @@
+{"languageserver": {
+    "terraform": {
+      "command": "~/.bin/terraform-lsp",
+      "filetypes": ["terraform", "tf"],
+      "initializationOptions": {}
+    }
+  },
+  "python.jediEnabled": false
+}
